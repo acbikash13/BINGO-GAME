@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      .signin {
+        border-radius: 10px;
+        box-shadow: 10px 10px 90px 30px rgba(231, 214, 214, 0.6);
+      }
+      body{
+        /* background-image: url('./assests/BaghChal.webp');   */
+        background-size: cover;
+        background-attachment:fixed;
+       
+      }
+
+      form {
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        
+      }
+      .form-group {
+        width: 350px;
+        height: 85px;
+        
+      }
+      input[type="text"],input[type="password"],textarea{
+        border-radius: 10px;
+        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
+        height: 60px;
+
+      } 
+      .main{
+        justify-content: center;
+        padding-top: 60px;
+      }
+      .login-button{
+        width: 350px;
+        height: 55px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
+
+      }
+      .btn-link {
+        border-radius: 10px;
+        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
+        width: 350px;
+        height: 55px;
+        margin-top: 25px;
+      }
+      img {
+        border-radius: 10px;
+        /* box-shadow: 5px 10px 90px 30px rgba(231, 214, 214, 0.6); */
+        /* box-shadow: 0px 0px 40 0px rgba(231, 214, 214, 0.6); */
+      }
+   
+    </style>
+</head>
+<body class="bg-dark p-5">
+  <div class="homepage-content container p-5">
+    <div class="row main p-5">
+      <div style="background-image: none;" class="col-lg-5 shadow-lg mx-auto  signin col-sm-12 bg-light p-5"> 
+          <form id="login-form" class="login mx-auto">
+            <div class="form-group">
+              <input id="email" type="text" placeholder="Email or username" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group">
+              <input id="password" type="password" placeholder="Password" class="form-control" id="password" name="password">
+            </div>
+            <button  type="submit" class="btn login-button btn-info">Login</button>
+            <button type="button" class="btn btn-link bg-info text-white" id="signUpButton">Sign in</button>
+        </form>
+      </div>
+    </div>
+    </div>
+  </div>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
+  <script src="/controller/cookies.js"></script>
+  <!-- <script src="../js/script.js"></script>   -->
+  
+  <script>
+    const loginForm =  document.getElementById('login-form');
+    loginForm.addEventListener("submit", (event)=>{
+      event.preventDefault();
+      // gets the username and password from the form.
+      const email = loginForm.email.value;
+      const password = loginForm.password.value;
+
+      const userData = {
+          userName: email,
+          password: password
+      };
+      axios({
+        method:'post',
+        url: '/api/auth/login',
+        config: {
+          headers: {
+            'Authorization': 'Bearer ' + ''
+          }
+        },
+        data : userData,
+        validateStatus:()=>true
+      })
+      . then (function(response) {
+        if(response.status === 200) {
+          console.log(response.data.message);
+          cookies.set('jwt',response.headers.authorization.replace('Bearer ',''));
+			    window.location.href = '/homePage';
+        }
+        else {
+          console.log(response)
+          alert(response.data.message)
+        }
+        
+
+      })
+      .catch (function(error) {
+        console.log(error);
+      })
+});
+  // send the user to the signup page upon clicking on the signup button
+    const signUpButton = document.getElementById("signUpButton");
+    console.log(signUpButton);
+    signUpButton.addEventListener("click", function() {
+        // give the name of the endpoint and it will redirect to that endpoint.
+        window.location.href = '/signup';
+      })
+     
+</script>  
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap" rel="stylesheet">
+    <style>
+      .mainBody {
+        max-width: 100%;
+        min-width: 30%;
+        width: 30%;
+        border-radius: 30px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      }
+        
+        .profile {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+        .profileHeading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        }
+        .userName {
+          font-size: 30px;
+        }
+        .changePassword {
+          display: none;
+        }
+        .save {
+          border-radius: 10px;
+        }
+        input {
+          text-align: center;
+          background-color: aliceblue;
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        img{
+          width: 30%;
+          border: solid black 2px;
+          border-radius: 100%;
+        }
+        .labelsName {
+          font: 14px;
+          font-family: fantasy;
+          font-weight: 100;
+
+        }
+    </style>
+</head>
+<body>
+  <div class="container mainBody mt-3 bg-light p-3 ">
+    <div class="profileHeading">
+      <img src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/202878173/original/13d5d3d14c9f2c0d57137e8f1afa7059eb61d3a4/draw-cartoon-caricature-headshot-avatar-from-photo.png" alt="">
+      <p class="text-info userName"><%= user.firstName + '  ' + user.lastName %></p>
+
+    </div>
+    <!-- Form to update user information -->
+    <h2>Edit Profile</h2>
+    <form class="m-3">
+        <div class="p-4 rounded  profile" >
+          First Name:
+          <input class="form-control p-3" type="text" id="firstName" name="firstName" value="<%= user.firstName %>"> 
+          Last Name:
+          <input class="form-control p-3" type="text" id="lastName" name="lastName" value="<%= user.lastName %>">
+          Email:
+          <input class="form-control p-3" type="email" id="email" name="email" value="<%= user.email %>">
+          Phone:
+          <input class="form-control p-3" type="phone" id="phone" name="phone" value="8597864579">
+          <button type="button" class="btn bg-info save updateProfile" id="updateProfileButton">Update Profile</button>
+          <button type="button" class="btn bg-info save" id="changePasswordButton">Rset Password</button>
+        </form>
+        <div>
+            <div class="changePassword">
+              <input class="form-control p-3"  type="password" id="currentPassword" name="password" placeholder="Current Password"><br>
+              <input class="form-control p-3" type="password" id="newPassword" name="password" placeholder="New Password"><br>
+              <input class="form-control p-3" type="password" id="confirmPassword" name="password"  placeholder="Confirm New Password"><br>
+              <button type="button" class="btn p-1 bg-info rounded" id="savePasswordButton">Save Password</button>
+            </div>
+        </div>
+      </div>
+  </div>
+</body>
+ <!-- jQuery library -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <!-- Popper JS -->
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
+ <script src="../../controller/cookies.js"></script>
+ <script>
+    axios({
+        method: 'get',
+        url: '/profile', // Update the URL to your protected profile route
+        headers: {
+            'Authorization': `Bearer ${cookies.get('jwt')}`
+        }
+        })
+        .then(function (response) {
+            if(response.status ===401) {
+              alert(response.data.message);
+              window.location.href = '/login'
+              return;
+            }
+          
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        // toggle the update password fields upon clicking on the reset password button
+    $(document).ready(function() {
+      $("#changePasswordButton").click(function() {
+        $(".changePassword").css("display", "block");
+        $("#changePasswordButton").css("display","none");
+      });
+    });
+
+    // function that handles the update information/profile button
+    $(document).ready(function() {
+      $("#updateProfileButton").click(function() {
+        const firstName =  $("#firstName").val()
+        const lastName =  $("#lastName").val()
+        const userName =  $("#email").val()
+        const phone =  $("#phone").val()
+        //validate the user input. This is also handled at server level for extra security
+        if(firstName.length ===0) {
+            alert("First Name can not be empty!");
+        }
+        else if(lastName.length ===0) {
+          alert("Last Name can not be empty!");
+        }
+        else if(userName.length ===0) {
+            alert("Email can not be empty");
+        }
+        else if(phone.toString().length ===0) {
+            alert("Phone number can not be empty");
+        }
+
+        else {
+            axios({
+              method:"post",
+              url: '/profile/updateProfileInformation',
+              headers: {
+                'Authorization': `Bearer ${cookies.get('jwt')}`
+              },
+              data :{
+                firstName:firstName,
+                lastName: lastName,
+                userName:userName,
+                phone: phone
+              },
+              validateStatus:()=>true
+            })
+            .then(function(response) {
+              alert("Status code: " + response.status + ", Message: " + response.data.message);
+              //reload the page
+              window.location.reload();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });    
+        }
+      })
+    })
+
+
+
+    // function that handles the changePassword functionality. Calls the changePassword API
+    $(document).ready(function(){
+      $("#savePasswordButton").click(function() {
+        var currentPasswordValue = $("#currentPassword").val();
+        var newPasswordValue = $("#newPassword").val();
+        var confirmPasswordValue = $("#confirmPassword").val();
+        if((newPasswordValue !== confirmPasswordValue)) {
+          return alert("Please check your new password. Make sure they match.");
+        }
+        else if(newPasswordValue.length <= 6) {
+          return alert("New password has to be greater than 6 characters long!")
+        }
+        else {
+          axios({
+            method:'post',
+              url: '/profile/changePassword',
+              headers: {
+                'Authorization': `Bearer ${cookies.get('jwt')}`
+              },
+              data :{
+                password:currentPasswordValue,
+                newPassword: confirmPasswordValue
+              },
+              validateStatus:()=>true
+            })
+            .then(function(response) {
+              if(response.status ==200) {
+                // send password changed successfully message and then send the user to the login page
+                alert(response.data.message);
+                window.location.href ='/login';
+              }
+              else {
+                // configure for incorrect password or unauthorized user.
+                alert(response.data.message);
+              }
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            }); 
+        }
+    })
+    });
+ </Script>
+</html>

@@ -1,0 +1,25 @@
+### GET REQUEST
+GET http://localhost:3000/auth/signup
+
+
+### POST REQUEST
+POST http://localhost:8000/profile/changePassword
+content-type: application/json
+Authorization: Bearer {{"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OGNjOTI5MmVjMGNkMjFjZjEwZDgwZiIsImlhdCI6MTcwMzcyNTM1OSwiZXhwIjoxNzAzODExNzU5fQ.NCBBa5Rf9-qYl6-XXLAOJeCWQYg4Blikx-FLbIJ69V4"}}
+
+{
+    "NewPassword": "test123"
+}
+
+  
+### PUT REQUEST
+PUT http://localhost:8000/api/games/1234
+content-type: application/json
+
+
+{
+    "bingoNumber":24
+}
+
+### DELETE REQUEST
+DELETE http://localhost:8000/assignmentSixds/apiRequests/644584527726e807c87376bd

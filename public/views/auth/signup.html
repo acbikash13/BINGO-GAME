@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style> 
+      form {
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        
+      }
+      .form-group {
+        width: 350px;
+        height: 85px;
+        
+      }
+      input[type="text"],input[type="password"],textarea{
+        border-radius: 10px;
+        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
+        height: 60px;
+
+      } 
+   
+      .btn-link {
+        border-radius: 10px;
+        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
+        width: 350px;
+        height: 55px;
+        margin-top: 25px;
+      }
+      img {
+        border-radius: 10px;
+      }
+   
+    </style> 
+</head>
+<body class="bg-dark">
+    <!-- Signup Form -->
+    <div class="homepage-content container p-5">
+        <div class="row main p-5">
+          <div class="col-lg-5  mx-auto signin col-sm-12  p-5"> 
+              <form id="signup-form" class="login mx-auto">
+                <div class="form-group">
+                  <input id="first-name" type="text" placeholder="First Name" class="form-control" name="firstName">
+                </div>
+                <div class="form-group">
+                  <input id="last-name" type="text" placeholder="Last Name" class="form-control"  name="lastName">
+                </div>
+                <div class="form-group">
+                    <input id="email" type="text" placeholder="Email" class="form-control"  name="email">
+                  </div>
+                <div class="form-group">
+                    <input id="password" type="password" placeholder="Password" class="form-control" id="password" name="password">
+                  </div>
+                <button type="submit" id="signUpButton" class="btn btn-link bg-info text-white" >Sign in</button>
+                <button type="button" id="loginButton" class="btn btn-link bg-info text-white" onclick="location.href='/login';">Login</button>
+
+            </form>
+          </div>
+        </div>
+        </div>
+      </div>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
+    <!-- <script type="module" src="../js/join.js"></script> -->
+    <script>
+      //get the signup form
+      const form =  document.getElementById('signup-form');
+      // submits the signup info once the submit action is done upon clicking the submit button.
+      form.addEventListener("submit", (event)=>{
+        console.log("sign in button clicked")
+        event.preventDefault();
+        const firstname = form.firstName.value;
+        const lastname = form.lastName.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const data = {
+            firstName: firstname,
+            lastName: lastname,
+            userName: email,
+            password: password
+        };
+        axios.post('/api/auth/signup', data)
+            .then(response => {
+              if(response.status === 201) {
+                  console.log(response.status);
+                  window.location.href = '/login';
+              }
+              else if(response.status === 406) {
+                  alert(response.json);
+              }
+            form.reset();
+            })
+            .catch(error => {
+                alert(response.json());
+            });
+        });
+    </script>
+    </body>
+    </html>
