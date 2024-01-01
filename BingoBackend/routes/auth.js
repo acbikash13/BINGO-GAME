@@ -8,6 +8,7 @@ const {login,signup} = require('../apiHandler/authHandler.js');
 
 const {changePassword} = require('../apiHandler/changePassword.js');
 const { updateUsesrInformation } = require('../apiHandler/changeUserInformation.js');
+const {joinGame,hostGame} = require('../apiHandler/joinHostHandler.js')
 const { type } = require('os');
 
 ///serve the login page
@@ -49,9 +50,53 @@ get(async (req,res) => {
         res.sendFile(path.join(__dirname,'../../public/views/public/joinHost.html'));
     }
     else {
-        res.status(401).json({ message: 'User is not authorized' }); 
+        res.status(401).json({ message: 'User is not authorized. Please login again to continue!'}); 
+    }
+});
+
+//Route for hosting the game
+router.route('/hostGame')
+.post(async (req,res) => {
+    const userIsValid = await checkUser(req.cookies['jwt']);
+    console.log(userIsValid)
+    if(userIsValid) {
+        try {
+            let hostedGame = await hostGame(userIsValid);
+            res.status(hostedGame.status).json({message:hostedGame.message,gameId:hostedGame.uniqueGameId});
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).json({ message: "An unexpected error occurred" });
+        }
+    }
+    else {
+        res.status(401).json({ message: 'User is not authorized. Please login again to continue!' });
     }
 })
+//route for joining the game
+
+router.route('/joinGame')
+.post(async (req,res) => {
+    const userIsValid = await checkUser(req.cookies['jwt']);
+    if(userIsValid) {
+        let gameId = req.body.gameId;
+        console.log("Game id is while joining is "+ typeof(Number(gameId)));
+        try {
+            let joinGameResult = await joinGame(userIsValid, Number(gameId));
+            console.log("The join Game result is " + joinGameResult.message)
+            res.status(joinGameResult.status).json({ message: joinGameResult.message });
+        } catch (err) {
+            console.error(err);
+            // Handle any unexpected errors that occurred during joinGame
+            res.status(500).json({ message: "An unexpected error occurred" });
+        }
+
+    }
+    else {
+        res.status(401).json({ message: 'User is not authorized. Please login again to continue!' });
+    }
+})
+
 
 //gets the profile page data for the respective user.
 router.route('/profile')
@@ -105,8 +150,24 @@ router.route('/profile/updateProfileInformation')
     } else {
         return res.status(401).json({ message: 'User is not authorized. Please login first.' });
     }
-})
+});
 
+router.route('/gamePage')
+.get(async (req,res)=> {
+    const userIsValid = await checkUser(req.cookies['jwt']);
+    if(userIsValid) {
+        res.sendFile(path.join(__dirname,'../../public/views/public/gamePage.html'));
+    }
+    else {
+        res.status(401).json({ message: 'User is not authorized. Please login to continue' }); 
+    }
+});
+
+router.route('/contact')
+.get(async (req,res)=> {
+        res.sendFile(path.join(__dirname,'../../public/views/public/contact.html'));
+
+});
 
 
 

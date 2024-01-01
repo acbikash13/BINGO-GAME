@@ -15,7 +15,6 @@ async function changePassword(userId,newPassword) {
         const database = await databasePromise;
 		const collection =  database.collection('users');
         // encrypt the password before saving into the database
-        console.log("The userId when changing the password is" + userId);
         newPassword = bcrypt.hashSync(newPassword,salt).replace(`${salt}.`,'');
         //generate a jwt salt
         jwtsalt = generateJWTSalt(64);
@@ -30,6 +29,7 @@ async function changePassword(userId,newPassword) {
     }
     catch(error) {
         console.log(error);
+        res.status(500).json({message: 'Internal Server Error!'});
     }  
 };
 

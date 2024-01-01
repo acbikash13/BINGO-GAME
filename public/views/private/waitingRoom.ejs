@@ -5,26 +5,76 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+        <title>Waitroom</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles&family=Sevillana&display=swap" rel="stylesheet">
         <style>
-            
-            
-        
+            .mainDiv {
+                border-radius: 35px;
+            }
+            div {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            h1,h2 {
+                font-family: 'Rubik Bubbles', sans-serif;
+            }
+            li{
+
+                color: rgb(66, 10, 197);
+                font-size: 35px;
+                font-weight: light;
+                font-family: 'sevillana', sans-serif;
+
+            }
+            .gameOptions {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-flow:row wrap;
+                gap: 50px;
+            }
+            button {
+                background-color: rgb(245, 242, 238);
+                border-radius: 35px;
+                box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+            }
+           
         </style>
     </head>
-    <body class="bg-light text-center">
-        <div class="container-fluid bg-light p-5 text-center>
-            
-
-        </div>
-            
+    <body class="bg-light">
+        <div class="container p-3 bg-light shadow-lg my-5 mainDiv">
+            <div>
+                <h1 class="">Game ID: <%= data.gameId%></h1>
+                <h2 class="display-1">Players Joined</h2>
+            </div>
+            <ol>
+                <li class="custom-p"><%= data.testMessage%></li>       
+                <li class="custom-p"><%= data.testMessage%></li>       
+                <li class="custom-p"><%= data.testMessage%></li>       
+                <li class="custom-p"><%= data.testMessage%></li>             
+            </ol>
+            <div class="gameOptions">
+                <button type="button" id="isReady" class="btn btn-info p-3">Ready</button>
+                <button type="button" id="startGame" class="btn btn-info p-3">Start</button>
+            </div>
+        </div>   
     </body>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Popper JS -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
+    <script src="../../controller/cookies.js"></script>
+
 </html>
