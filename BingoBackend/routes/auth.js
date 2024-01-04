@@ -148,7 +148,7 @@ router.route('/profile/updateProfileInformation')
             res.status(500).json({ message: "An error occurred while resetting the password." });
         }
     } else {
-        return res.status(401).json({ message: 'User is not authorized. Please login first.' });
+        res.status(401).json({ message: 'User is not authorized. Please login first.' });
     }
 });
 
@@ -168,6 +168,17 @@ router.route('/contact')
         res.sendFile(path.join(__dirname,'../../public/views/public/contact.html'));
 
 });
+router.route('/getUserId')
+.post(async (req,res)=> {
+    const userIsValid =  await checkUser(req.cookies['jwt']);
+    console.log("The use is id " +  userIsValid)
+    if(userIsValid){
+        res.status(200).json({userId:userIsValid});
+    }
+    else {
+        res.status(401).json({ message: 'User is not authorized. Please login first.' });
+    }
+})
 
 
 

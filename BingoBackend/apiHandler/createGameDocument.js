@@ -5,6 +5,7 @@ function createGameDocument(){
       numbers: [], // Numbers from 1 to 25 in random order
       playersJoined :[], // include the userId which is unique. Users turn will be based on where they are in the list. 
       // One playerStates represent on player in a game and each players corresponding properties.
+      
       playerStates: [
           {
               userId: "userId",

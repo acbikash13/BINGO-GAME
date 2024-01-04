@@ -4,14 +4,21 @@ const IP = process.env.IP_ADDRESS ;
 
 const express=require('express');
 const app = express();
+const http = require('http');
+const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const cookieParser =  require('cookie-parser');
+
+//create an express app
+const server =  http.createServer(app);
+
+// create an io server
+const io =  socketIo(server);
 
 app.use(bodyParser.json());
 app.use(express.json())
 const auth =  require('./BingoBackend/routes/auth');
 const waitingRoom = require('./BingoBackend/routes/waitRoom')
-
 const path = require('path');
 
 app.use(cookieParser());
@@ -28,7 +35,36 @@ app.set("view engine", "ejs")
 app.use('',auth);
 app.use('/game',waitingRoom);
 
-app.listen(port,()=>{
+
+// socket.IO setup
+
+io.on('connection', (socket) => {
+    console.log('A user Joined the Game Room');
+    socket.on('connect',()=>{
+        socket.on('playerJoined', (data) => {
+            // sets the each connection with their unique userId. 
+            // create a room for only the 
+            socket.join(data.gameId);
+            console.log("server side playerJoined info "+  data.playersName);
+            io.to(data.gameId).emit('playerJoined', data);
+        });
+
+    })
+    socket.on('isReady',(data)=>{
+        io.emit('isReady', data);
+    });
+    socket.on('startGame',(data)=>{
+        io.emit('startGame',data);
+    })
+    socket.on('disconnect',()=> {
+        console.log('User left the game room!');
+    });
+});
+
+
+
+
+server.listen(port,()=>{
     console.log(`Server started at ${port}`)
 });
 
