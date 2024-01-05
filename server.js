@@ -40,16 +40,12 @@ app.use('/game',waitingRoom);
 
 io.on('connection', (socket) => {
     console.log('A user Joined the Game Room');
-    socket.on('connect',()=>{
-        socket.on('playerJoined', (data) => {
-            // sets the each connection with their unique userId. 
-            // create a room for only the 
-            socket.join(data.gameId);
-            console.log("server side playerJoined info "+  data.playersName);
-            io.to(data.gameId).emit('playerJoined', data);
-        });
-
-    })
+    socket.on('playerJoined', (data) => {
+        // sets the each connection with their unique userId. 
+        // create a room for only the 
+        socket.join(data.gameId);
+        io.to(data.gameId).emit('playerJoined', data);
+    });
     socket.on('isReady',(data)=>{
         io.emit('isReady', data);
     });

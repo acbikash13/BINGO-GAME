@@ -11,14 +11,11 @@ const checkUser = require('../middleware/checkUser');
 router.route("/hostGame/waitingRoom").
 get(async (req,res) => { 
     let userIsValid =  await checkUser(req.cookies['jwt']);
-    console.log("The user is valid " +userIsValid)
     try {
         if(userIsValid) {
             let gameId = Number(req.query.gameId);
             // playersName is a list of the name of all the players 
-            let playersName = await getPlayersJoinedNames(gameId);
-            console.log(playersName)
-    
+            let playersName = await getPlayersJoinedNames(gameId);   
             let data = {
                 playersName:JSON.stringify(playersName),
                 gameId:gameId,
@@ -45,7 +42,6 @@ get(async (req,res) => {
     
     try {
         const userIsValid = await checkUser(req.cookies['jwt']);
-        console.log("The user is valid " +userIsValid)
         if(userIsValid) {
             let gameId = req.query.gameId;
             let playersName = await getPlayersJoinedNames(gameId);
@@ -75,12 +71,10 @@ get(async (req,res) => {
 router.route("/startGame").
 post(async (req,res) => {
     try {
-        console.log("server side startGame")
         // return a userId if the user is authenticated and authorized to access this endpoint
         const userIsValid = await checkUser(req.cookies['jwt']);
         if (userIsValid) {
             const gameId = req.body.gameId;
-            console.log("server side gameID " +  gameId)
             let startGameStatus = await startGameByHost(userIsValid,gameId);
             res.status((startGameStatus).status).json({message : startGameStatus.message,userId:userIsValid});
         }
@@ -101,7 +95,6 @@ router.route("/setReady")
     try {
         // return a userId if the user is authenticated and authorized to access this endpoint
         const userIsValid = await checkUser(req.cookies['jwt']);
-        console.log("server side set ready")
         if(userIsValid) {
             const gameId = req.body.gameId;
             let setIsReadyToTrue = await setReadyForGame(userIsValid,gameId);
