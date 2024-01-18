@@ -43,41 +43,31 @@
         justify-content: center;
         padding-top: 60px;
       }
-      .login-button{
-        width: 350px;
-        height: 55px;
+      .login-button,#signUpButton{
+        width: 100%;
         border-radius: 10px;
         box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
 
-      }
-      .btn-link {
-        border-radius: 10px;
-        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
-        width: 350px;
-        height: 55px;
-        margin-top: 25px;
       }
       img {
         border-radius: 10px;
         /* box-shadow: 5px 10px 90px 30px rgba(231, 214, 214, 0.6); */
         /* box-shadow: 0px 0px 40 0px rgba(231, 214, 214, 0.6); */
       }
+    
    
     </style>
 </head>
-<body class="bg-dark p-5">
+<body class="container-fluid bg-dark p-5">
   <div class="homepage-content container p-5">
     <div class="row main p-5">
       <div style="background-image: none;" class="col-lg-5 shadow-lg mx-auto  signin col-sm-12 bg-light p-5"> 
           <form id="login-form" class="login mx-auto">
-            <div class="form-group">
-              <input id="email" type="text" placeholder="Email or username" class="form-control" id="email" name="email">
-            </div>
-            <div class="form-group">
-              <input id="password" type="password" placeholder="Password" class="form-control" id="password" name="password">
-            </div>
-            <button  type="submit" class="btn login-button btn-info">Login</button>
-            <button type="button" class="btn btn-link bg-info text-white" id="signUpButton">Sign in</button>
+            <input id="email" type="text" placeholder="Email or username" class="form-control mt-3" id="email" name="email">
+            <input id="password" type="password" placeholder="Password" class="form-control mt-3" id="password" name="password">
+            <button type="submit" class="btn login-button btn-info p-3 mt-3">Login</button>
+            <button type="button" class="btn btn-link bg-info text-white p-3 mt-3" id="signUpButton">Sign In</button>
+        
         </form>
       </div>
     </div>

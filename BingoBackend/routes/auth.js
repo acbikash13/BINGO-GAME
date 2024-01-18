@@ -9,7 +9,7 @@ const {login,signup} = require('../apiHandler/authHandler.js');
 const {changePassword} = require('../apiHandler/changePassword.js');
 const { updateUsesrInformation } = require('../apiHandler/changeUserInformation.js');
 const {joinGame,hostGame} = require('../apiHandler/joinHostHandler.js')
-const { type } = require('os');
+const {getFirstName} =  require("../scripts/getFirstName.js")
 
 ///serve the login page
 router.route("/login").
@@ -152,11 +152,17 @@ router.route('/profile/updateProfileInformation')
     }
 });
 
-router.route('/gamePage')
+router.route('/game/gamePage')
 .get(async (req,res)=> {
     const userIsValid = await checkUser(req.cookies['jwt']);
+    let gameId = Number(req.query.gameId);
     if(userIsValid) {
-        res.sendFile(path.join(__dirname,'../../public/views/public/gamePage.html'));
+        let data= {
+                    userId:userIsValid,
+                    firstName: await getFirstName(userIsValid),
+                    gameId :gameId
+                }
+        res.render('gamePage.ejs',(data));
     }
     else {
         res.status(401).json({ message: 'User is not authorized. Please login to continue' }); 

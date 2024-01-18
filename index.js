@@ -1,6 +1,5 @@
 require('dotenv').config();
 const port= process.env.PORT ;
-const IP = process.env.IP_ADDRESS ;
 
 const express=require('express');
 const app = express();
@@ -19,7 +18,9 @@ app.use(bodyParser.json());
 app.use(express.json())
 const auth =  require('./BingoBackend/routes/auth');
 const waitingRoom = require('./BingoBackend/routes/waitRoom')
+const gamePage =  require('./BingoBackend/routes/gamePage')
 const path = require('path');
+
 
 app.use(cookieParser());
 // serves the static files
@@ -34,12 +35,12 @@ app.set("view engine", "ejs")
 //routes
 app.use('',auth);
 app.use('/game',waitingRoom);
+app.use('/gameBoard',gamePage);
 
 
 // socket.IO setup
 
 io.on('connection', (socket) => {
-    console.log('A user Joined the Game Room');
     socket.on('playerJoined', (data) => {
         // sets the each connection with their unique userId. 
         // create a room for only the 
@@ -49,8 +50,17 @@ io.on('connection', (socket) => {
     socket.on('isReady',(data)=>{
         io.emit('isReady', data);
     });
-    socket.on('startGame',(data)=>{
+    socket.on('startGame',(data)=>{ 
         io.emit('startGame',data);
+    })
+
+    socket.on('createRoom',(data)=>{
+        console.log("Type is " + typeof(data.gameId) + " with " + data.gameId);
+        socket.join(data.gameId);
+    }
+    )
+    socket.on('bingoNumberCrossed',(data)=>{
+        io.to(data.gameId).emit('bingoNumberCrossed',data)
     })
     socket.on('disconnect',()=> {
         console.log('User left the game room!');
@@ -60,8 +70,8 @@ io.on('connection', (socket) => {
 
 
 
-server.listen(port,()=>{
-    console.log(`Server started at ${port}`)
+server.listen(process.env.PORT||8000,()=>{
+    console.log(`Server started at ${process.env.PORT}`)
 });
 
 

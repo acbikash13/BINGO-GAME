@@ -188,8 +188,7 @@
             })
             socket.on('startGame',(data)=> {
                 alert(data);
-                window.location.href = '/game/gamePage'
-
+                window.location.href = `/game/gamePage?gameId=${gameId}`;
             })
         });
     </script>
