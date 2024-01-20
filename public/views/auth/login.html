@@ -114,19 +114,17 @@
 			    window.location.href = '/homePage';
         }
         else {
-          console.log(response)
           alert(response.data.message)
         }
         
 
       })
       .catch (function(error) {
-        console.log(error);
+       alert(error);
       })
 });
   // send the user to the signup page upon clicking on the signup button
     const signUpButton = document.getElementById("signUpButton");
-    console.log(signUpButton);
     signUpButton.addEventListener("click", function() {
         // give the name of the endpoint and it will redirect to that endpoint.
         window.location.href = '/signup';

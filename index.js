@@ -55,7 +55,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('createRoom',(data)=>{
-        console.log("Type is " + typeof(data.gameId) + " with " + data.gameId);
         socket.join(data.gameId);
     }
     )
