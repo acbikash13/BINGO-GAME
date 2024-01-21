@@ -130,6 +130,7 @@
         }
         .messageArea{
             height: 300px;
+            width: 300px;
             background-color: none;
             border: solid 1px white;
             border-radius: 30px;
@@ -186,13 +187,17 @@
             position: relative;
          }
          .typeMessage{
-            background-color: transparent;
+            background-color: rgb(66, 109, 109);
             border: solid 1px white;
             border-radius: 30px;
          }
+         #typeMessageBox::placeholder {
+            color: white; /* Replace "your-color" with the desired color value */
+        }
          .messages{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 17px;
+            font-family:monospace;
+            font-size: 15px;
+            color: white;
          }
          .sendMessageBtn{
             background-color: transparent;
@@ -251,152 +256,13 @@
     <div class="main">
         <div class="chatbox p-2">
             <div class="messageArea p-3 overflow-auto">
-                <p class="messages>
-                    <%=firstName %>:Hello
-                </p>
                 <p class="messages">
                     <%=firstName %>:Hello! Hola!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello? Absolutely Fine!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi Hofdsfs sfedsd fsdf sd fsd fsd fsw are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hola!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello? Absolutely Fine!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages>
-                    <%=firstName %>:Hello
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hola!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello? Absolutely Fine!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hola!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello? Absolutely Fine!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages>
-                    <%=firstName %>:Hello
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hola!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello? Absolutely Fine!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hola!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello? Absolutely Fine!
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
-                </p>
-                <p class="messages">
-                    <%=firstName %>:Hello! Hi How are you?
                 </p>
             </div>
             <div>
-                <input type="text" placeholder="Type your Message" class="p-2 typeMessage">
-                <button type="button" class="sendMessageBtn">Send</button>
+                <input type="text" placeholder="Type your Message" class="p-2 typeMessage text-white" id="typeMessageBox">
+                <button type="button" id="sendMessageBtn" class="sendMessageBtn text-white">Send</button>
             </div>
         </div>
         <div class="container text-center mx-auto my-auto  text-center gameBoard">
@@ -459,7 +325,9 @@
             let fields = document.querySelectorAll(".fields");
             let audio = document.querySelector("#audioButton");
             let gameAudio = document.querySelector("#gameAudio");
-            console.log(fields)
+            let firstName = `<%= firstName %>`
+            console.log('firstname is ' + firstName)
+
             // flag to check if the boxes are filled or not.
             let isFilled = false;
             //check if the players is isDone or not. isDone reflects if the player is satisfied with their bingo layout
@@ -468,11 +336,30 @@
             //code to set the numbers when clicked on the done button. This will not let change the numbers 
             // we will store the indexes of the crossed 
     
-    
+            
+
             
             // create a room
             socket.emit('createRoom',{gameId:gameId});
-            console.log(gameId + "gameId is ")
+
+            // function that handles the message functionality
+
+            $("#sendMessageBtn").click(function(){
+                let message = $("#typeMessageBox").val();
+                socket.emit('sendMessage',{firstName:firstName,message:message, gameId:gameId});
+                $("#typeMessageBox").val("");
+            })
+
+            socket.on('sendMessage',(data)=>{
+                // get the name and the message from the sendMessage data
+                let message = data.message;
+                let firstName = data.firstName;
+                 // Create a new <p> element with the message content
+                let newMessage = $('<p>').addClass('messages').text(firstName + ': ' + message);
+                //append the name and the data to the .messageArea div
+                $(".messageArea").append(newMessage);
+            })
+            
             axios({
                 method: 'get',
                 url: '/game/gamePage', // Update the URL to your protected profile route

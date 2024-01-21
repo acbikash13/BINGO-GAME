@@ -61,6 +61,9 @@ io.on('connection', (socket) => {
     socket.on('bingoNumberCrossed',(data)=>{
         io.to(data.gameId).emit('bingoNumberCrossed',data)
     })
+    socket.on('sendMessage',(data)=>{
+        io.to(data.gameId).emit('sendMessage',data)
+    })
     socket.on('disconnect',()=> {
         console.log('User left the game room!');
     });
