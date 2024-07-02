@@ -40,7 +40,7 @@ Your project will start on the specified IP and port on your local network. You 
 If you'd like to contribute to this project, please fork the repository and use a feature branch. Pull requests are welcome.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ## Contact
 If you have any questions or feedback or want to contribute to this project and discuss, please feel free to reach out to:
