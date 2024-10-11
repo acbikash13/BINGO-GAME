@@ -94,27 +94,38 @@
                 userId: `<%= userId %>`
             };
             let gameId =  playersFirstName.gameId;
-
             let playersListWithTheirId= (playersFirstName.playersName).substring(1,(playersFirstName.playersName).length -1).split(",");
+    
             // we  were getting playersName in A sting. each item was seperated by a comma
-            // console.log(playersListWithTheirId)
+            let newPlayersJoinedListAsListOfObject  = playersListWithTheirId.map((item)=>{
+                return JSON.parse(item);
+            })
+           
+           
+             playersFirstName = {
+                playersName: JSON.stringify(newPlayersJoinedListAsListOfObject),
+                gameId:  Number(`<%= gameId %>`),
+                userId: `<%= userId %>`
+            };
+            // playersFirstName.playersName = newPlayersJoinedListAsListOfObject;
             
             socket.emit('playerJoined', playersFirstName);
             socket.on('playerJoined', (playersFirstName) => {
                 $("ol").empty();
-                for(let i =0; i<playersListWithTheirId.length; i++) {
-                    let userInfo = JSON.parse(playersListWithTheirId[i])
-                    console.log(userInfo);
-                    for(userId in userInfo){
-                        $("ol").append(`
-                            <li class="custom-p">${userInfo[userId]} 
+                let listOfPlayers = playersFirstName.playersName.substring(1,playersFirstName.playersName.length-1).split(",");
+
+                for(items of listOfPlayers){
+                   let playersFirstNameAndId = JSON.parse(items);
+                   for (let userId in playersFirstNameAndId) {
+                    $("ol").append(`
+                            <li class="custom-p">${playersFirstNameAndId[userId]} 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="red" id="${userId}" class="bi bi-toggle2-on" viewBox="0 0 16 16">
                                     <path d="M7 5H3a3 3 0 0 0 0 6h4a5 5 0 0 1-.584-1H3a2 2 0 1 1 0-4h3.416q.235-.537.584-1"/>
                                     <path d="M16 8A5 5 0 1 1 6 8a5 5 0 0 1 10 0"/>
                                 </svg>   
-                            </li>`);
-                            $()
-                    }
+                            </li>`
+                        ); 
+                   }
                 }
             });
             $("#ready").on("click", function(){
@@ -177,8 +188,7 @@
             })
             socket.on('startGame',(data)=> {
                 alert(data);
-                window.location.href = '/gamePage'
-
+                window.location.href = `/game/gamePage?gameId=${gameId}`;
             })
         });
     </script>

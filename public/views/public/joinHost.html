@@ -13,13 +13,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap" rel="stylesheet">
     <style>
         body {
-            background-image: url('./assests/homepage3.png');
-            width: 100%;
+            /* background-image: url('./assests/homepage6.jpg'); */
+            /* width: 100%; */
             background-repeat: no-repeat;
             background-size: cover;
             
         }
-        .joinHostMenu {
+        /* .joinHostMenu {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -29,9 +29,7 @@
             align-items: center;
             flex-wrap: wrap;
             flex-direction: column;
-        
-
-        }
+        } */
         .joinHost-container {
             display: flex;
             align-items: center;
@@ -65,7 +63,7 @@
         h1 {
             font-family: 'Rubik Bubbles', sans-serif;
             color: rgb(43, 46, 92);
-            font-size: 60px;
+            font-size: 4em;
         }
         h3,li {
             font-family: 'Rubik Bubbles', sans-serif;
@@ -92,7 +90,11 @@
 
     </style>
 </head>
-<body>
+<body class="container-fluid bg-light">
+  <div class="row m-3 p-3 bg-dark">
+    <div>
+      <img src="./assests/logo.png" alt="logo" class="img-fluid">
+    </div>
     <nav class="navbar navbar-expand-lg navbar-light float-right">
       <div class="container">
         <button class="navbar-toggler text-white bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,6 +147,7 @@
         </div>
         
     </div>
+  </div>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->

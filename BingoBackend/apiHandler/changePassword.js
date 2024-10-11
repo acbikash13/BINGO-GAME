@@ -18,7 +18,7 @@ async function changePassword(userId,newPassword) {
         newPassword = bcrypt.hashSync(newPassword,salt).replace(`${salt}.`,'');
         //generate a jwt salt
         jwtsalt = generateJWTSalt(64);
-        // change the password as well as set the jwt to empty.
+        // change the password as well as set the jwt to something else.
         let token = jwt.sign({id:userId},jwtsalt,{expiresIn:jwtExpiration});
         await collection.updateOne({_id:ObjectId(userId)},
             {$set:{
