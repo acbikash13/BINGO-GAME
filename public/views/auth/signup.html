@@ -9,67 +9,101 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
 
     <style> 
-      form {
-        margin: 20px;
+      html, body {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+      }
+      form {
+        width: 400px;
+        display: flex;
         flex-direction: column;
-        
+        align-items: center;
+        gap: 15px;
       }
-      .form-group {
-        width: 350px;
-        height: 85px;
-        
+      @media screen and (max-width:450px ) {
+        form {
+          max-width: 350px;
+        }
       }
-      input[type="text"],input[type="password"],textarea{
+      input[type="text"], input[type="password"], textarea {
         border-radius: 10px;
         box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
         height: 60px;
-
       } 
-   
-      .btn-link {
+     #signUpButton, button {
+        font-size: 15px;
+        font-family: Georgia, 'Times New Roman', Times, serif;
         border-radius: 10px;
         box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
-        width: 350px;
-        height: 55px;
-        margin-top: 25px;
+        width: 100%;
+      }
+      .horizontalLine {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      hr {
+        color: white;
+        width: 40%;
+        height: 1px;
+        background-color: white;
+      }
+      p {
+        font-size: 16px;
+      }
+      .otherOptionsForLoggin {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
       }
       img {
-        border-radius: 10px;
+        border-radius: 50px;
       }
-   
+      .main-div {
+        height: 90vh;
+        border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+      }
+      hr {
+        background-color: rgb(20, 175, 175);
+      }
+      .welcome {
+        font-family: "Stylish", serif;
+        font-style: normal;
+
+      }
+  
     </style> 
 </head>
-<body class="bg-dark">
-    <!-- Signup Form -->
-    <div class="homepage-content container p-5">
-        <div class="row main p-5">
-          <div class="col-lg-5  mx-auto signin col-sm-12  p-5"> 
-              <form id="signup-form" class="login mx-auto">
-                <div class="form-group">
-                  <input id="first-name" type="text" placeholder="First Name" class="form-control" name="firstName">
-                </div>
-                <div class="form-group">
-                  <input id="last-name" type="text" placeholder="Last Name" class="form-control"  name="lastName">
-                </div>
-                <div class="form-group">
-                    <input id="email" type="text" placeholder="Email" class="form-control"  name="email">
-                  </div>
-                <div class="form-group">
-                    <input id="password" type="password" placeholder="Password" class="form-control" id="password" name="password">
-                  </div>
-                <button type="submit" id="signUpButton" class="btn btn-link bg-info text-white" >Sign in</button>
-                <button type="button" id="loginButton" class="btn btn-link bg-info text-white" onclick="location.href='/login';">Login</button>
-
-            </form>
+<body class="container row">
+  <div class="bg-light row  main-div">
+    <img class="col-12 col-md-7 col-sm-12 my-3"  src="../../assests/homepage3.png" alt="Homepage Image">
+    <div class="col-12 col-md-5 col-sm-12 bg-light rounded shadow-lg d-flex justify-contents-center" >
+      <form id="signup-form" class="login mx-auto my-auto">
+        <p class="text-info display-4 welcome">Welcome to the BINGO Game. <br> Please Sign Up!</p>
+          <input id="first-name" type="text" placeholder="First Name" class="form-control" name="firstName">        
+          <input id="last-name" type="text" placeholder="Last Name" class="form-control"  name="lastName">  
+          <input id="email" type="text" placeholder="Email" class="form-control"  name="email">
+          <input id="password" type="password" placeholder="Password" class="form-control" id="password" name="password">
+          <button type="submit" id="signUpButton" class="btn  bg-info text-white p-3 mt-3" >Sign in</button>
+          <div class="horizontalLine">
+            <hr>
+            <p class="text-light text-center my-auto text-dark">Or</p>
+            <hr>
           </div>
-        </div>
-        </div>
-      </div>
+          <button type="button" id="loginButton" class="btn p-2 bg-light text-info p-3" onclick="location.href='/login';">Login</button>
+          <a class="text-info my-2" href="/contact" target="_blank" style="text-decoration: underline; font-size: 18px;" >Please Contact Us Here!</a>
+      </form>
+    </div>
+  </div>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->
@@ -84,7 +118,6 @@
       const form =  document.getElementById('signup-form');
       // submits the signup info once the submit action is done upon clicking the submit button.
       form.addEventListener("submit", (event)=>{
-        console.log("sign in button clicked")
         event.preventDefault();
         const firstname = form.firstName.value;
         const lastname = form.lastName.value;
@@ -96,21 +129,27 @@
             userName: email,
             password: password
         };
-        axios.post('/api/auth/signup', data)
-            .then(response => {
-              if(response.status === 201) {
-                  console.log(response.status);
-                  window.location.href = '/login';
-              }
-              else if(response.status === 406) {
-                  alert(response.json);
-              }
-            form.reset();
-            })
-            .catch(error => {
-                alert(response.json());
-            });
-        });
+        if(firstname.length !== 0 && lastname.length !==0 && email.length !== 0 && password.length !==0) {
+          axios.post('/api/auth/signup', data)
+              .then(response => {
+                if(response.status === 201) {
+                    console.log(response.status);
+                    window.location.href = '/login';
+                }
+                else if(response.status === 406) {
+                    alert(response.json);
+                }
+              form.reset();
+              })
+              .catch(error => {
+                  alert(response.json());
+              });
+          }
+          else {
+            alert('Please feel out the entire form to sign in!')
+          }     
+          });
+  
     </script>
     </body>
     </html>

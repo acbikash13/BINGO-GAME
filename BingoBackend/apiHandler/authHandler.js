@@ -10,23 +10,29 @@ const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 
 async function login(req,res)  {
+
+	// get the user credentials
 	const user =  {
 		userName: req.body.userName,
 		password: req.body.password
 	}
 	try {
 		const database = await databasePromise;
-		const collection =  database.collection('users');
+		const collection =  database.collection('users'); 
+
+		// check if the user is registered
 		collection.find({userName:user.userName},{_id:1,userName:1,password:1}).toArray(async function(err,result){
 			if (err) throw err;
 			if(result.length == 0) {
 				res.status(406).json({message:'User is not registered'})
 			}
+			//user is registered
 			else {
-				// validates the password
+				// validates the password. if wrong
 				if(result[0].password != bcrypt.hashSync(req.body.password,salt).replace(`${salt}.`,'')) {
 					return res.status(406).json({message:'Wrong Password'});
 				}
+				// if right, generate a jwt token and send it to the client
 				else {
 					userId =  result[0]._id.toString().replace('New ObjectId("','').replace('")','');
 					let token = jwt.sign({id:userId},jwtsalt,{expiresIn:jwtExpiration});
@@ -40,9 +46,6 @@ async function login(req,res)  {
 		console.error('Error connecting to the database:', error);
 		res.status(500).json({message: 'Internal Server Error!'});
 	  }
-
-
-
 };
 
 async function signup(req,res){
@@ -74,9 +77,19 @@ async function signup(req,res){
 	}
 }
 
-async function logout(req,res) {
-	
+async function logout(jwtToken) {
+	try {
+		const database = await databasePromise;
+		const collection =  database.collection('users');
+		collection.updateOne({jwt:jwtToken},{$set:{jwt:''}});
+		return true;
+	}
+	catch (error) {
+		console.error('Error connecting to the database: ', error);
+		return false
+	}	
 
 }
 
-module.exports = {login,signup};
+
+module.exports = {login,signup,logout};

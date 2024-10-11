@@ -1,45 +1,49 @@
+// server.js
 require('dotenv').config();
-const port= process.env.PORT ;
+const port = process.env.PORT;
 
-const express=require('express');
+const express = require('express');
 const app = express();
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const cookieParser =  require('cookie-parser');
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const cors = require('cors');
 
-//create an express app
-const server =  http.createServer(app);
 
-// create an io server
-const io =  socketIo(server);
+// Create an express app
+const server = http.createServer(app);
+
+// Create an io server
+const io = socketIo(server);
+
+
 
 app.use(bodyParser.json());
-app.use(express.json())
-const auth =  require('./BingoBackend/routes/auth');
-const waitingRoom = require('./BingoBackend/routes/waitRoom')
-const gamePage =  require('./BingoBackend/routes/gamePage')
-const path = require('path');
+app.use(express.json());
 
+// Import routes
+const auth = require('./BingoBackend/routes/auth');
+const waitingRoom = require('./BingoBackend/routes/waitRoom');
+const gamePage = require('./BingoBackend/routes/gamePage');
 
 app.use(cookieParser());
-// serves the static files
+// Serves the static files
 app.use(express.static('public'));
 // Set the views directory to the correct path
 app.set("views", path.join(__dirname, 'public', 'views', 'private'));
 
 // Configure bodyParser middleware and set the ejs engine
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set("view engine", "ejs")
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.set("view engine", "ejs");
 
-//routes
-app.use('',auth);
-app.use('/game',waitingRoom);
-app.use('/gameBoard',gamePage);
-
+// Routes
+app.use('', auth);
+app.use('/game', waitingRoom);
+app.use('/gameBoard', gamePage);
 
 // socket.IO setup
-
 io.on('connection', (socket) => {
     socket.on('playerJoined', (data) => {
         // sets the each connection with their unique userId. 
@@ -68,9 +72,6 @@ io.on('connection', (socket) => {
         console.log('User left the game room!');
     });
 });
-
-
-
 
 server.listen(process.env.PORT||8000,()=>{
     console.log(`Server started at ${process.env.PORT}`)

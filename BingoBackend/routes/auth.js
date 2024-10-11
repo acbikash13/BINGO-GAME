@@ -1,15 +1,27 @@
 const express = require('express');
 const router =  express.Router();
 const path = require('path');
-const checkUser = require('../middleware/checkUser.js')
+const isUserAuthenticated = require('../middleware/checkUser.js')
 const {getUserData} = require('../apiHandler/profilePageDataHandler.js')
-
-const {login,signup} = require('../apiHandler/authHandler.js');
-
+const {login,signup,logout} = require('../apiHandler/authHandler.js');
 const {changePassword} = require('../apiHandler/changePassword.js');
 const { updateUsesrInformation } = require('../apiHandler/changeUserInformation.js');
 const {joinGame,hostGame} = require('../apiHandler/joinHostHandler.js')
 const {getFirstName} =  require("../scripts/getFirstName.js")
+const {handleOAuth2Callback} = require('../apiHandler/googleAuthHandler.js');
+// const {oAuth2Client} =  require('../scripts/OAuth2Client.js');
+const { OAuth2Client } = require('google-auth-library');
+const { url } = require('inspector');
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const oAuth2Client = new OAuth2Client(
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    'http://localhost:8000/.auth/login/google/callback' // Ensure this matches the registered redirect URI in the google cloud console
+);
+
+
 
 ///serve the login page
 router.route("/login").
@@ -29,9 +41,46 @@ post((req,res)=> {
     login(req,res);
 });
 
+// handle the logout function
+router.route("/api/auth/logout").post(async (req, res) => { 
+    console.log("Inside the logout route");
+    const jwtToken = req.cookies['jwt'];
+    const userIsValid = await isUserAuthenticated(jwtToken);
+    // call the logout function which sets the jwt token to null. and then redirect the user to the login page.
+    if(userIsValid) {
+        logout(jwtToken);
+        res.status(200).json({message:'User is successfully logged out!'});
+    }
+    else {
+        res.status(401).json({ message: 'User is not authorized. Please login again to continue!'});
+
+    }
+});
+
 // serves the signup page
 router.route('/signup').get((req,res)=> {
     res.sendFile(path.join(__dirname,'../../public/views/auth/signup.html'));
+});
+
+// Google sign-in route
+router.route('/google/authurl').get(async (req, res) => {
+    try {
+        const authorizeUrl = oAuth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+        });
+        res.json({ url: authorizeUrl });
+
+    } catch (error) {
+        console.error('Error generating authorize URL:', error);
+        res.status(500).send('Error generating authorize URL');
+    }
+});
+//handle the OAuth2 callback
+
+router.route('/.auth/login/google/callback').get((req,res)=> { 
+    //function to handles after the callback is done
+    handleOAuth2Callback(oAuth2Client,req,res);
 });
 
 // endpoint to handle the signup function
@@ -42,10 +91,11 @@ router.route("/api/auth/signup")
 });
 
 
+
 // get the homepage. Configure it in such a way that only authorized users are sent to this page
 router.route("/homePage").
 get(async (req,res) => {
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     if(userIsValid) {
         res.sendFile(path.join(__dirname,'../../public/views/public/joinHost.html'));
     }
@@ -57,7 +107,7 @@ get(async (req,res) => {
 //Route for hosting the game
 router.route('/hostGame')
 .post(async (req,res) => {
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     console.log(userIsValid)
     if(userIsValid) {
         try {
@@ -77,7 +127,7 @@ router.route('/hostGame')
 
 router.route('/joinGame')
 .post(async (req,res) => {
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     if(userIsValid) {
         let gameId = req.body.gameId;
         console.log("Game id is while joining is "+ typeof(Number(gameId)));
@@ -102,7 +152,7 @@ router.route('/joinGame')
 router.route('/profile')
 .get(async (req,res) => {
     // Use async/await with checkUser. userIsValid will give us the userId if the user is valid else nothing.
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     // send the user data in the profile.ejs template and send it to the user.
     if(userIsValid) {
         const user = await getUserData(userIsValid);
@@ -115,7 +165,7 @@ router.route('/profile')
 // route for the changepassword
 router.route('/profile/changePassword')
 .post(async (req, res) => {
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     if (userIsValid) {
         try {
             await changePassword(userIsValid, req.body.newPassword);
@@ -131,7 +181,7 @@ router.route('/profile/changePassword')
 
 router.route('/profile/updateProfileInformation')
 .post (async (req,res) => {
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     if (userIsValid) {
         try {
            const isUpdated =  await updateUsesrInformation(userIsValid, req.body);
@@ -154,7 +204,7 @@ router.route('/profile/updateProfileInformation')
 
 router.route('/game/gamePage')
 .get(async (req,res)=> {
-    const userIsValid = await checkUser(req.cookies['jwt']);
+    const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     let gameId = Number(req.query.gameId);
     if(userIsValid) {
         let data= {
@@ -176,7 +226,7 @@ router.route('/contact')
 });
 router.route('/getUserId')
 .post(async (req,res)=> {
-    const userIsValid =  await checkUser(req.cookies['jwt']);
+    const userIsValid =  await isUserAuthenticated(req.cookies['jwt']);
     console.log("The use is id " +  userIsValid)
     if(userIsValid){
         res.status(200).json({userId:userIsValid});
