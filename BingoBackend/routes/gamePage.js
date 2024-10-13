@@ -4,7 +4,9 @@ const {getBingoBoardNumbers} = require('../apiHandler/fillBingoBoard')
 const {convertOneDArrayIntoTwoDArray} = require('../scripts/convertBingoNumberIntoTwoDArray');
 const {updatePlayerBingoBoard} =  require('../apiHandler/updatePlayerBingoBoard');
 const {crossTheBingoNumber} =  require('../apiHandler/bingoNumberCrossed');
+const {getPlayersList} = require('../apiHandler/getPlayerList');
 const checkUser = require('../middleware/checkUser');
+
 
 router.route('/getNumbers')
 .post(async (req,res)=>{
@@ -28,6 +30,37 @@ router.route('/setBingoNumber')
     }
 });
 
+// returns the list of players in the game only if the user is authorized and the user is in the game itself.
+router.route('/getPlayersList')
+.post(async (req,res)=>{
+    let gameId =  req.body.gameId;
+    const playerList = await getPlayersList(gameId);
+    const userIsValid = await checkUser(req.cookies['jwt']);
+    if (!userIsValid) {
+        return res.status(401).json({ message: 'User is not authorized' });
+    }
+    if(playerList.status === 404) {
+        return res.status(404).json({message:playerList.message});
+    }
+    if(playerList.status === 500) {
+        return res.status(500).json({message:playerList.message});
+    }
+
+    const playerIdsList =  playerList.playerList
+    // Only send the playerList if the user is authorized and the user is in the game itself.
+    for (let playerId of playerIdsList) {
+        if(playerId === userIsValid) {
+            console.log("The players list is " + playerIdsList)
+            return res.status(playerList.status).json({
+                message:playerList.message,
+                playerList:playerList.playerList,
+                userId: userIsValid
+            });
+        }
+    }
+
+    return res.status(401).json({ message: 'User is not in the game! So can not give the list of all the users in that game.' });
+})
 router.route('/crossTheNumber')
 .post(async (req,res)=>{
     let gameId =  req.body.gameId;
