@@ -27,6 +27,7 @@ app.use(express.json());
 const auth = require('./BingoBackend/routes/auth');
 const waitingRoom = require('./BingoBackend/routes/waitRoom');
 const gamePage = require('./BingoBackend/routes/gamePage');
+const { count } = require('console');
 
 app.use(cookieParser());
 // Serves the static files
@@ -45,11 +46,19 @@ app.use('/gameBoard', gamePage);
 
 // socket.IO setup
 io.on('connection', (socket) => {
+    let currentTurn = 0;
     socket.on('playerJoined', (data) => {
         // sets the each connection with their unique userId. 
         // create a room for only the 
         socket.join(data.gameId);
         io.to(data.gameId).emit('playerJoined', data);
+    });
+
+    // Broadcast player turn to all clients
+    socket.on('playersTurn', (newTurnCount) => {
+        currentTurn = newTurnCount; // Update server-side count
+        console.log('Current turn: ' + currentTurn);
+        io.emit('playersTurn', currentTurn); // Broadcast to all clients
     });
     socket.on('isReady',(data)=>{
         io.emit('isReady', data);

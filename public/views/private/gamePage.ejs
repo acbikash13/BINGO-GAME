@@ -241,7 +241,7 @@
                 <button class="shadow-lg" id="fill">Fill</button>
             </li>
             <li class="nav-item m-2 done">
-                <button class="shadow-lg" id="done">Done</button>
+                <button class="shadow-lg" id="done" onclick="getPlayersList()">Done</button>
             </li>
             <li class="nav-item m-2">
                 <button class="shadow-lg" id="exit">Exit</button>
@@ -324,30 +324,65 @@
             let audio = document.querySelector("#audioButton");
             let gameAudio = document.querySelector("#gameAudio");
             let firstName = `<%= firstName %>`
-            console.log('firstname is ' + firstName)
+            
+
+        
+            //count is the variable that says the number of times the user has clicked on the unique numbers. It also helps us to find the players turn by doing count%playersList.length. This gives us the index of the current player in the playersList array whose turn is to play the game.
+            let count = 0;
 
             // flag to check if the boxes are filled or not.
             let isFilled = false;
             //check if the players is isDone or not. isDone reflects if the player is satisfied with their bingo layout
-            let isDone= false;        
             //isDone checks whether the elements are set to non editable or not.
-            //code to set the numbers when clicked on the done button. This will not let change the numbers 
-            // we will store the indexes of the crossed 
-    
+            let isDone= false;        
+            // get the lists of players and the userId for the self user.
             
+            let playersList;
+            let userId;
+            async function getPlayersList(){
+                try {
+                    const response = await axios({
+                        method: 'post',
+                        url: '/gameBoard/getPlayersList',
+                        headers: {
+                            'Authorization': `Bearer ${cookies.get('jwt')}`
+                    },
+                        data: {
+                            gameId: gameId,
+                        }
+                 });
+            
+                    playersList = response.data.playerList;
+                    userId = response.data.userId;
 
-            
+                    console.log("Players list is :  ", playersList);
+                    console.log("User ID:", userId);
+
+                }
+                catch (error) {
+                    console.error("Error fetching the players list" + error);   
+                }
+            }
+            getPlayersList();
+
+            socket.on('playersTurn',currentTurn=>{
+                console.log(`It's player ${playersList[count % playersList.length]}'s turn`);
+                count = currentTurn;
+            })
+               // this function is used to increase the counter of the players turn locally. This is used to check the players turn and then send the playersTurn event to the server.
+               function endTurn() {
+                    count++;
+                    socket.emit('playersTurn',count);
+            }
+
             // create a room
             socket.emit('createRoom',{gameId:gameId});
-
             // function that handles the message functionality
-
             $("#sendMessageBtn").click(function(){
                 let message = $("#typeMessageBox").val();
                 socket.emit('sendMessage',{firstName:firstName,message:message, gameId:gameId});
                 $("#typeMessageBox").val("");
             })
-
             socket.on('sendMessage',(data)=>{
                 // get the name and the message from the sendMessage data
                 let message = data.message;
@@ -358,25 +393,25 @@
                 $(".messageArea").append(newMessage);
             })
             
-            axios({
-                method: 'get',
-                url: '/game/gamePage', // Update the URL to your protected profile route
-                headers: {
-                    'Authorization': `Bearer ${cookies.get('jwt')}`
-                }
-            })
-            .then(function (response) {
+            // axios({
+            //     method: 'get',
+            //     url: '/game/gamePage', // Update the URL to your protected profile route
+            //     headers: {
+            //         'Authorization': `Bearer ${cookies.get('jwt')}`
+            //     }
+            // })
+            // .then(function (response) {
             
-            })
-            .catch(function (error) {
-                if (error.response.status === 401) {
-                alert(error.response.data.message);
-                window.location.href = '/login';
-                }
-                else {
-                console.log("Error is "+ error);
-                }
-            });
+            // })
+            // .catch(function (error) {
+            //     if (error.response.status === 401) {
+            //     alert(error.response.data.message);
+            //     window.location.href = '/login';
+            //     }
+            //     else {
+            //     console.log("Error is "+ error);
+            //     }
+            // });
             // this stores the BingoNumbers for a user. These are in random order ranging from 1 to 25. We update it to our numbers once we finalise our bingoBoard with the numbers.     
             // Makes the input field read only. Do it in the server side so that it is not easy to manipulate
             $(".fields").prop('readonly', true);
@@ -388,6 +423,8 @@
                     alert('Please fill the boxes first!')
                 }
             });
+
+            // this function is used to set the gameBoard for the user. This is done by setting the numbers in the input fields to the numbers that are generated by the server.
             function done(){ 
                 $(".fill").css("display","none");
                 $(".done").css("display","none");
@@ -417,9 +454,11 @@
                 })
                 // this block of code is to cross the numbers whenever the users clicks on the numbers,or we can just change the color of the blocks.
                 // First we have to make sure, the numbers are set Done i.e they are read only afer we click the done button, or the Done button and we have to store the numbers click on some sort of grid.
-                if(isDone){ 
+                console.log("The players list before is is " + JSON.stringify(playersList));
+                if(isDone && playersList[count%playersList.length] == userId){ 
                     for(let i = 0; i < fields.length; i++){  
                         fields[i].addEventListener('click',function(){
+                                console.log("clicked the current count is " + count )    
                                 audio.playbackRate = 3;
                                 audio.play();
                                 fields[i].style.pointerEvents = 'none';
@@ -438,6 +477,8 @@
                                 })
                                 .then(function(response){
                                     fields[i].style.backgroundColor = 'purple';
+                                    socket.emit('bingoNumberCrossed', { gameId, value: field.value });
+                                    endTurn(); // Move to next player
                                     // once the number is purple on the user, send the bingoCrossed event the server and then the server will broadcast to all the other users.
                                     data = {
                                         gameId: `<%= gameId%>`,
@@ -461,19 +502,15 @@
                                     .catch(function(error){
                                         console.log(error)
                                     })
-
-
-
                                 })
                                 .catch(function(error){
                                     console.log(error);
                                     alert(error)
                                 })
                             });
-                    }
+                    } 
                 } 
             }
-    
             // Fills the numbers randomly generated in the database
             fillButton.addEventListener('click',fill);
             function fill(){
@@ -487,7 +524,6 @@
                     }
                 })
                 .then(function(response){
-            
                     let listOfNumbers = response.data.listOfNumbers;
                     bingoNumbers = listOfNumbers;
                     console.log(bingoNumbers + " inside the fill funciton!")
@@ -501,7 +537,6 @@
                     console.log("Error in fill function")
                 })
             }
-
             socket.on('bingoNumberCrossed',(data)=>{
                 let bingoBlockValue = data.value;
                 $('input[value="' + bingoBlockValue + '"]').css('background-color', 'purple');
@@ -517,5 +552,4 @@
 </script>
 
 </body>
-
 </html>

@@ -88,7 +88,6 @@ async function logout(jwtToken) {
 		console.error('Error connecting to the database: ', error);
 		return false
 	}	
-
 }
 
 

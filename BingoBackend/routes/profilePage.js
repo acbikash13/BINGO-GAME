@@ -1,4 +1,3 @@
-
 //gets the profile page data for the respective user.
 router.route('/profile')
 .get(async (req,res) => {
