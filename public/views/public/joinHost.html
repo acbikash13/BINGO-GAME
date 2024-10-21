@@ -42,16 +42,17 @@
         align-items: center;
         padding-bottom: 2rem;
         width: 600px;
-        background-color: cyan;
+        background-color: rgba(0, 113, 200, 0.9); /* Cyan with 50% transparency */
         opacity: 1;
         margin: 30% auto 0;
-        border-radius: 15px;
+        border-radius: 10px 10px 0px 0px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 1.0);
       }
       .joinHost-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1rem;
+        gap: 2rem;
         height: 100%;
         width: 100%;
       }
@@ -63,15 +64,51 @@
           rgb(242, 112, 156),
           rgb(255, 148, 114)
         );
-        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px,
+          /* Main shadow */ rgba(255, 255, 255, 0.6) 0px 0px 15px 2px,
+          /* Glowing edges */ rgba(255, 112, 156, 0.8) 0px 0px 25px 4px inset; /* Inner glow effect */
         border: none;
         padding: 1rem 2rem;
-        transition: transform 0.3s;
+        transition: transform 0.3s, box-shadow 0.3s ease-in-out;
+        position: relative;
+        z-index: 1;
       }
+
       #joinGameButton:hover,
       #hostGameButton:hover {
-        transform: scale(1.1);
+        transform: scale(1.05); /* Slight zoom on hover */
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 25px 80px 6px,
+          /* Larger main shadow on hover */ rgba(255, 255, 255, 0.9) 0px 0px
+            20px 3px,
+          /* Brighter glowing edges */ rgba(255, 112, 156, 0.9) 0px 0px 30px 6px
+            inset; /* Stronger inner glow effect */
       }
+
+      #joinGameButton::before,
+      #hostGameButton::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border-radius: 65px;
+        background: linear-gradient(
+          45deg,
+          rgba(255, 112, 156, 0.7),
+          rgba(255, 255, 255, 0.7)
+        );
+        filter: blur(10px);
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      #joinGameButton:hover::before,
+      #hostGameButton:hover::before {
+        opacity: 1;
+      }
+
       button:focus {
         outline: none;
       }
@@ -153,54 +190,52 @@
     </div>
     <div class="join-host-menu">
       <div class="p-3 joinHost-container">
-        <div>
-          <button type="button" class="btn btn-primary" id="hostGameButton">
-            <h1>Host</h1>
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            id="joinGameButton"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-          >
-            <h1>Join</h1>
-          </button>
-        </div>
-
-        <!-- Modal -->
-        <div
-          class="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
+        <button type="button" class="btn btn-primary" id="hostGameButton">
+          <h1>Host</h1>
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="joinGameButton"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
         >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header text-center">
-                <h1 class="text-info text-center">Join a Game</h1>
-              </div>
-              <div class="modal-body border-0">
-                <input
-                  type="number"
-                  placeholder="Game ID Number"
-                  id="gameIdNumber"
-                  class="p-3 shadow-lg text-center"
-                />
-              </div>
-              <div class="modal-footer border-0">
-                <button
-                  type="button"
-                  class="btn modalBtn"
-                  data-bs-dismiss="modal"
-                >
-                  <h3>Close</h3>
-                </button>
-                <button type="button" class="btn modalBtn" id="enterGame">
-                  <h3>Join Game</h3>
-                </button>
-              </div>
+          <h1>Join</h1>
+        </button>
+      </div>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h1 class="text-info text-center">Join a Game</h1>
+            </div>
+            <div class="modal-body border-0">
+              <input
+                type="number"
+                placeholder="Game ID Number"
+                id="gameIdNumber"
+                class="p-3 shadow-lg text-center"
+              />
+            </div>
+            <div class="modal-footer border-0">
+              <button
+                type="button"
+                class="btn modalBtn"
+                data-bs-dismiss="modal"
+              >
+                <h3>Close</h3>
+              </button>
+              <button type="button" class="btn modalBtn" id="enterGame">
+                <h3>Join Game</h3>
+              </button>
             </div>
           </div>
         </div>
