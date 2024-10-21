@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign up</title>
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -21,73 +21,6 @@
     />
 
     <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      form {
-        width: 400px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-      }
-      @media screen and (max-width: 450px) {
-        form {
-          max-width: 350px;
-        }
-      }
-      input[type="text"],
-      input[type="password"],
-      textarea {
-        border-radius: 10px;
-        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
-        height: 60px;
-      }
-      #signUpButton,
-      button {
-        font-size: 15px;
-        font-family: Georgia, "Times New Roman", Times, serif;
-        border-radius: 10px;
-        box-shadow: 0px 0px 40px 0px rgb(108, 122, 132);
-        width: 100%;
-      }
-      .horizontalLine {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      hr {
-        color: white;
-        width: 40%;
-        height: 1px;
-        background-color: white;
-      }
-      p {
-        font-size: 16px;
-      }
-      .otherOptionsForLoggin {
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-      }
-      img {
-        border-radius: 50px;
-      }
-      .main-div {
-        height: 90vh;
-        border-radius: 20px;
-        box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
-      }
-      hr {
-        background-color: rgb(20, 175, 175);
-      }
       .welcome {
         font-family: "Stylish", serif;
         font-style: normal;
@@ -95,82 +28,96 @@
     </style>
   </head>
   <body>
-    <div>
-      <div class="bg-light row main-div">
+    <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
+      <section
+        class="relative flex items-end bg-gray-900 lg:col-span-9 lg:h-full xl:col-span-8"
+      >
         <img
-          class="col-12 col-md-7 col-sm-12 my-3"
+          alt="bingo-image"
           src="../../assests/homepage3.png"
-          alt="Homepage Image"
+          class="absolute inset-0 h-full w-full object-cover opacity-80"
         />
-        <div
-          class="col-12 col-md-5 col-sm-12 bg-light rounded shadow-lg d-flex justify-contents-center"
-        >
-          <form id="signup-form" class="login mx-auto my-auto">
-            <p class="text-info display-4 welcome">
-              Welcome to the BINGO Game. <br />
+      </section>
+      <main
+        class="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-3 lg:px-16 lg:py-12 xl:col-span-4"
+      >
+        <div class="max-w-xl lg:max-w-3xl">
+          <div class="relative -mt-16 block">
+            <h1 class="text-2xl welcome sm:text-4xl text-cyan-500">
+              Welcome to Bingo Game!
+              <br />
               Please Sign Up!
-            </p>
-            <input
-              id="first-name"
-              type="text"
-              placeholder="First Name"
-              class="form-control"
-              name="firstName"
-            />
-            <input
-              id="last-name"
-              type="text"
-              placeholder="Last Name"
-              class="form-control"
-              name="lastName"
-            />
-            <input
-              id="email"
-              type="text"
-              placeholder="Email"
-              class="form-control"
-              name="email"
-            />
-            <input
-              id="password"
-              type="password"
-              placeholder="Password"
-              class="form-control"
-              id="password"
-              name="password"
-            />
-            <button
-              type="submit"
-              id="signUpButton"
-              class="btn bg-info text-white p-3 mt-3"
-            >
-              Sign in
-            </button>
-            <div class="horizontalLine">
-              <hr />
-              <p class="text-light text-center my-auto text-dark">Or</p>
-              <hr />
+            </h1>
+          </div>
+          <form
+            id="signup-form"
+            class="mt-8 grid grid-cols-6 gap-6 shadow-md rounded-md p-3"
+          >
+            <div class="col-span-6">
+              <input
+                type="text"
+                id="first-name"
+                placeholder="First Name"
+                name="firstName"
+                placeholder="Enter your email"
+                class="mt-1 w-full p-4 rounded-md shadow-md"
+              />
             </div>
-            <button
-              type="button"
-              id="loginButton"
-              class="btn p-2 bg-light text-info p-3"
-              onclick="location.href='/login';"
-            >
-              Login
-            </button>
-            <a
-              class="text-info my-2"
-              href="/contact"
-              target="_blank"
-              style="text-decoration: underline; font-size: 18px"
-              >Please Contact Us Here!</a
-            >
+            <div class="col-span-6">
+              <input
+                type="text"
+                id="last-name"
+                placeholder="Last Name"
+                name="lastName"
+                placeholder="Last Name"
+                class="mt-1 w-full p-4 rounded-md shadow-md"
+              />
+            </div>
+            <div class="col-span-6">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                class="mt-1 w-full p-4 rounded-md shadow-md"
+              />
+            </div>
+            <div class="col-span-6">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                class="mt-1 w-full rounded-md p-4 shadow-md"
+              />
+            </div>
+            <div class="col-span-6 flex-col sm:flex sm:items-center sm:gap-4">
+              <button
+                type="submit"
+                class="rounded-sm bg-cyan-500 p-2 w-full shadow-lg"
+              >
+                <span class="text-white">Sign Up</span>
+              </button>
+              <p class="text-cyan-500">Or</p>
+              <button
+                class="rounded-sm bg-cyan-500 p-2 w-full shadow-lg"
+                onclick="location.href='/login'"
+                type="button"
+              >
+                <span class="text-white">Log In</span>
+              </button>
+              <a
+                class="text-info my-2"
+                href="/contact"
+                target="_blank"
+                style="text-decoration: underline; font-size: 18px"
+                >Please Contact Us Here!</a
+              >
+            </div>
           </form>
         </div>
-      </div>
+      </main>
     </div>
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper JS -->

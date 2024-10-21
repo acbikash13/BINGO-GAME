@@ -14,77 +14,8 @@
       rel="stylesheet"
     />
     <style>
-      .btn-wooden-plank {
-        position: relative;
-        width: 240px;
-        height: 80px;
-        background: linear-gradient(
-          90deg,
-          #8b4513 0%,
-          #a0522d 5%,
-          #8b4513 10%,
-          #a0522d 15%,
-          #8b4513 20%,
-          #a0522d 25%,
-          #8b4513 30%,
-          #a0522d 35%,
-          #8b4513 40%,
-          #a0522d 45%,
-          #8b4513 50%,
-          #a0522d 55%,
-          #8b4513 60%,
-          #a0522d 65%,
-          #8b4513 70%,
-          #a0522d 75%,
-          #8b4513 80%,
-          #a0522d 85%,
-          #8b4513 90%,
-          #a0522d 95%,
-          #8b4513 100%
-        );
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-        cursor: pointer;
-        overflow: hidden;
-      }
-      .btn-wooden-plank::before {
-        content: "";
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        right: 2px;
-        bottom: 2px;
-        background: linear-gradient(
-            90deg,
-            transparent 50%,
-            rgba(255, 255, 255, 0.1) 50%
-          ),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 50%, transparent 50%);
-        background-size: 10px 100%, 20px 100%;
-        border-radius: 10px;
-      }
-      .btn-wooden-plank::after {
-        content: "";
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        right: 8px;
-        bottom: 8px;
-        background-color: #47a9ff;
-        border-radius: 6px;
-        box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3),
-          inset 0 -2px 5px rgba(0, 0, 0, 0.3);
-      }
-      .btn-wooden-plank span {
-        position: relative;
-        z-index: 1;
-        font-family: Arial, sans-serif;
-        font-size: 32px;
-        font-weight: bold;
-        color: white;
-        text-transform: uppercase;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      .welcome {
+        font-family: "Stylish", serif;
       }
     </style>
   </head>
@@ -105,18 +36,21 @@
       >
         <div class="max-w-xl lg:max-w-3xl">
           <div class="relative -mt-16 block">
-            <h1 class="text-2xl font-bold text-black sm:text-3xl">
-              Welcome to Bingo Game
+            <h1 class="text-2xl welcome sm:text-4xl text-cyan-500">
+              Welcome to Bingo Game!
             </h1>
           </div>
-          <form class="mt-8 grid grid-cols-6 gap-6">
+          <form
+            id="login-form"
+            class="mt-8 grid grid-cols-6 gap-6 shadow-md rounded-md p-3"
+          >
             <div class="col-span-6">
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="Enter your email"
-                class="btn-wooden-plank mt-1 w-full p-3 rounded-md shadow-md"
+                class="mt-1 w-full p-4 rounded-md shadow-md"
               />
             </div>
             <div class="col-span-6">
@@ -125,23 +59,24 @@
                 id="password"
                 name="password"
                 placeholder="Enter password"
-                class="mt-1 w-full rounded-md p-3 btn-wooden-plank shadow-md"
+                class="mt-1 w-full rounded-md p-4 shadow-md"
               />
             </div>
             <div class="col-span-6 flex-col sm:flex sm:items-center sm:gap-4">
-              <button type="submit" class="btn-wooden-plank">
-                <span>LOG IN</span>
+              <button type="submit" class="rounded-sm bg-cyan-500 p-2 w-full shadow-lg">
+                <span class= "text-white">LOG IN</span>
               </button>
-              <but ton class="btn-wooden-plank" id="signUpButton">
-                <span>SIGN UP</span>
+              <p class = "text-cyan-500">Or</p>
+              <button class="rounded-sm bg-cyan-500 p-2 w-full shadow-lg" id="signUpButton" type="button">
+                <span class= "text-white">SIGN UP</span>
               </button>
               <button
-                class="btn-wooden-plank"
+                class="rounded-sm bg-cyan-500 p-2 w-full shadow-lg"
                 type="button"
                 onclick="loginWithGoogle()"
                 id="signin-with-google"
               >
-                <span> Google </span>
+                <span class= "text-white"> Google </span>
               </button>
             </div>
           </form>
@@ -188,6 +123,7 @@
       });
 
       const signUpButton = document.getElementById("signUpButton");
+
       signUpButton.addEventListener("click", () => {
         window.location.href = "/signup";
       });
