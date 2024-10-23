@@ -21,6 +21,7 @@ async function hostGame(userId) {
         const uniqueGameId = generateUniqueGameId();
         gameDocument =  createGameDocument();
         gameDocument.gameId = (uniqueGameId);
+        gameDocument.bingoBoard.playerStates[0].isTurn = true;
         // get the userName of this user
         let userName = await database.collection('users').findOne(
             {_id:ObjectId(userId)}, 
@@ -54,7 +55,6 @@ async function hostGame(userId) {
         return err;
     }
 }
-
 
 // handles the join game functionality. It checks whether the game exists or not and if it exists, it inserts the player into that game. The function takes two parameters, the userId of the user who joined the game and the gameId. We check whether the game exists using the gameId
 async function joinGame(userId,gameId) {

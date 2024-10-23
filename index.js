@@ -27,7 +27,6 @@ app.use(express.json());
 const auth = require('./BingoBackend/routes/auth');
 const waitingRoom = require('./BingoBackend/routes/waitRoom');
 const gamePage = require('./BingoBackend/routes/gamePage');
-const { count } = require('console');
 
 app.use(cookieParser());
 // Serves the static files
@@ -44,8 +43,10 @@ app.use('', auth);
 app.use('/game', waitingRoom);
 app.use('/gameBoard', gamePage);
 
-// socket.IO setup
+
+// socet.IO setup
 io.on('connection', (socket) => {
+
     let currentTurn = 0;
     socket.on('playerJoined', (data) => {
         // sets the each connection with their unique userId. 
@@ -53,12 +54,11 @@ io.on('connection', (socket) => {
         socket.join(data.gameId);
         io.to(data.gameId).emit('playerJoined', data);
     });
-
-    // Broadcast player turn to all clients
-    socket.on('playersTurn', (newTurnCount) => {
-        currentTurn = newTurnCount; // Update server-side count
-        console.log('Current turn: ' + currentTurn);
-        io.emit('playersTurn', currentTurn); // Broadcast to all clients
+    socket.on('playerJoined', (data) => {
+        // sets the each connection with their unique userId. 
+        // create a room for only the 
+        socket.join(data.gameId);
+        io.to(data.gameId).emit('playerJoined', data);
     });
     socket.on('isReady',(data)=>{
         io.emit('isReady', data);
@@ -72,10 +72,15 @@ io.on('connection', (socket) => {
     }
     )
     socket.on('bingoNumberCrossed',(data)=>{
-        io.to(data.gameId).emit('bingoNumberCrossed',data)
+        io.emit('bingoNumberCrossed',data)
+    })
+    socket.on('updatePlayerTurn',(data)=>{
+        console.log ("The data for updatePlayerTurn is" + JSON.stringify(data));
+        io.emit('updatePlayerTurn',data)
     })
     socket.on('sendMessage',(data)=>{
-        io.to(data.gameId).emit('sendMessage',data)
+        console.log("The data for sendMessage is" + JSON.stringify(data))
+        io.emit('sendMessage',data)
     })
     socket.on('disconnect',()=> {
         console.log('User left the game room!');
