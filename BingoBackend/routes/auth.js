@@ -53,7 +53,6 @@ router.route("/api/auth/logout").post(async (req, res) => {
     }
     else {
         res.status(401).json({ message: 'User is not authorized. Please login again to continue!'});
-
     }
 });
 

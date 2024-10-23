@@ -10,7 +10,8 @@ async function updatePlayerBingoBoard(userId,gameId,newBoard) {
             gameId:Number(gameId), 'bingoBoard.playerStates.userId':userId
         },
         {$set:{
-            'bingoBoard.playerStates.$.board' : newBoard
+            'bingoBoard.playerStates.$.board' : newBoard,
+            'bingoBoard.playerStates.$.isFilled': true
         }}
         )
         console.log("Test inside the update api" + JSON.stringify(updatePlayerBoard ))

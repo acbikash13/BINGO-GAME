@@ -1,555 +1,709 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
     <style>
-        button{
-            border: white;
-            border-radius: 20px;
-            padding: 15px;
-        }
-        body{
-            background-image: url('../../assests/homepage6.jpg');
-        }
-        .displayNumber{
-            border-radius:30px ;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: rgba(224, 10, 10, 0.25) 0px 30px 60px -12px , rgba(180, 16, 16, 0.3) 0px 50px 36px -18px inset;
-            margin-right: 40px;
+      button {
+        border: white;
+        border-radius: 20px;
+        padding: 15px;
+      }
+      body {
+        background-image: url("../../assests/homepage5.jpg");
+        height: 100vh;
+        background-size: cover;
+      }
+      .displayNumber {
+        border-radius: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: rgba(224, 10, 10, 0.25) 0px 30px 60px -12px,
+          rgba(180, 16, 16, 0.3) 0px 50px 36px -18px inset;
+        margin-right: 40px;
+        width: 200px;
+      }
+      .display-1 {
+        font-weight: 400;
+        font-family: fantasy;
+      }
+      .main {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap-reverse;
+      }
+      .playersList {
+        display: flex;
+        align-items: center;
+      }
 
-        }
-        .display-1 {
-            font-weight: 400;
-            font-family:fantasy;
-        }
-        .main{
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap-reverse;
-        }
-        .playersList {
-            display: flex;
-            align-items: center;
-        }
-        
-        .row {
-            background-color: none;
-        }
-        .gameBoard{
-            height: 100%;
+      .row {
+        background-color: none;
+      }
+      .gameBoard {
+        height: 100%;
+      }
+      .playerListBtn {
+        border-radius: 30px;
+      }
+      .menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .fields {
+        font-size: 4vw;
+        font-weight: 100;
+        font-family: "Libre Baskerville", serif;
+        height: 100%;
+        width: 50%;
+        border: none;
+        border-radius: 35px;
+        background-color: #846ba0;
+        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+          rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+          rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset,
+          rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
+          rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+          rgba(0, 0, 0, 0.09) 0px 32px 16px;
+      }
+      p {
+        font-size: 20px;
+      }
 
-        }
-        .playerListBtn{
-            border-radius: 30px;
-        }
-        .menu {
-            display: flex;
-            justify-content: center;
-            align-items: center
-            ;
-        }
+      /*  this css is for the .fields field removing arrows that ups or downs the numbers */
 
-        .fields{
-            font-size: 4vw;
-            font-weight: 100;
-            font-family: 'Libre Baskerville', serif; 
-            height: 100%;
-            width: 50%;
-            border: none;
-            border-radius: 35px;
-            background-color: #846ba0;
-            box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-            
-        }
-        p {
-            font-size: 20px;
-            
-        }
-
-        /*  this css is for the .fields field removing arrows that ups or downs the numbers */
-
-        /* Chrome, Safari, Edge, Opera */
-        .fields::-webkit-outer-spin-button,
-        .fields::-webkit-inner-spin-button {
+      /* Chrome, Safari, Edge, Opera */
+      .fields::-webkit-outer-spin-button,
+      .fields::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
-        }
+      }
 
-        /* Firefox */
-        .fields[type=number] {
+      /* Firefox */
+      .fields[type="number"] {
         -moz-appearance: textfield;
         appearance: textfield;
-        }
-        /* Chrome, Safari, Edge, Opera */
-        .fields::-webkit-outer-spin-button,
-        .fields::-webkit-inner-spin-button {
+      }
+      /* Chrome, Safari, Edge, Opera */
+      .fields::-webkit-outer-spin-button,
+      .fields::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
-        }
+      }
 
-        /* Firefox */
-        .fields[type=number] {
-            -moz-appearance: textfield;
-            appearance: textfield;
-            text-align: center;  
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+      /* Firefox */
+      .fields[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .fields:hover,
+      #exit:hover,
+      #mute:hover,
+      #fill:hover,
+      #done:hover {
+        background-color: rgb(251, 183, 65);
+        cursor: pointer;
+        transform: scale(1.3);
+      }
+      .menu {
+        width: 30%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .card-body {
+        width: 200px;
+        background-color: transparent;
+        border: none;
+      }
+      .playersName {
+        font-size: larger;
+        font-family: Georgia, "Times New Roman", Times, serif;
+      }
+      .messageArea {
+        max-height: 200px;
+        min-height: 50px;
+        max-width: 200px;
+        background-color: none;
+        border: solid 1px white;
+        border-radius: 30px;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        scrollbar-width: thin; /* For Firefox */
+      }
 
-        }
-        .fields:hover, #exit:hover,#fill:hover, #done:hover {
-            background-color: rgb(251,183,65);
-            cursor: pointer;
-            transform: scale(1.3);
-        }
-        .menu{
-            width: 30%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        .card-body {
-            width: 200px; 
-            background-color: transparent; 
-            border: none;
-        }
-        .playersName{
-            font-size: larger;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-        }
-        .messageArea{
-            max-height: 200px;
-            min-height: 50px;
-            max-width: 200px;
-            background-color: none;
-            border: solid 1px white;
-            border-radius: 30px;
-            display: flex;
-            align-items: flex-start;
-            flex-direction: column;
-            scrollbar-width: thin; /* For Firefox */
-        }
+      /* Scroll bar for message are */
+      /* For WebKit-based browsers (Chrome, Safari) */
+      /* For WebKit-based browsers (Chrome, Safari) and Microsoft Edge */
+      .messageArea::-webkit-scrollbar,
+      .messageArea::-webkit-scrollbar-thumb {
+        width: 8px; /* Width of the scrollbar */
+        height: 20px; /* Height of the scrollbar thumb - adjust as needed */
+      }
 
-        /* Scroll bar for message are */
-        /* For WebKit-based browsers (Chrome, Safari) */
-        /* For WebKit-based browsers (Chrome, Safari) and Microsoft Edge */
-        .messageArea::-webkit-scrollbar,
-        .messageArea::-webkit-scrollbar-thumb {
-            width: 8px; /* Width of the scrollbar */
-            height: 20px; /* Height of the scrollbar thumb - adjust as needed */
-        }
+      /* For WebKit-based browsers (Chrome, Safari) */
+      .messageArea::-webkit-scrollbar-thumb {
+        background-color: #ccc; /* Color of the scrollbar thumb */
+        border-radius: 4px; /* Roundness of the scrollbar thumb */
+      }
 
-        /* For WebKit-based browsers (Chrome, Safari) */
-        .messageArea::-webkit-scrollbar-thumb {
-            background-color: #ccc; /* Color of the scrollbar thumb */
-            border-radius: 4px; /* Roundness of the scrollbar thumb */
-        }
+      /* For Microsoft Edge */
+      .messageArea::-ms-scrollbar-thumb {
+        background-color: #ccc; /* Color of the scrollbar thumb in Microsoft Edge */
+        border-radius: 4px; /* Roundness of the scrollbar thumb in Microsoft Edge */
+      }
 
-        /* For Microsoft Edge */
-        .messageArea::-ms-scrollbar-thumb {
-            background-color: #ccc; /* Color of the scrollbar thumb in Microsoft Edge */
-            border-radius: 4px; /* Roundness of the scrollbar thumb in Microsoft Edge */
-        }
+      /* For scrollbar thumb hover effect in WebKit-based browsers (Chrome, Safari) */
+      .messageArea::-webkit-scrollbar-thumb:hover {
+        background-color: #aaa; /* Color of the scrollbar thumb on hover */
+      }
 
-        /* For scrollbar thumb hover effect in WebKit-based browsers (Chrome, Safari) */
-        .messageArea::-webkit-scrollbar-thumb:hover {
-            background-color: #aaa; /* Color of the scrollbar thumb on hover */
-        }
+      /* For scrollbar thumb hover effect in Microsoft Edge */
+      .messageArea::-ms-scrollbar-thumb:hover {
+        background-color: #aaa; /* Color of the scrollbar thumb on hover in Microsoft Edge */
+      }
 
-        /* For scrollbar thumb hover effect in Microsoft Edge */
-        .messageArea::-ms-scrollbar-thumb:hover {
-            background-color: #aaa; /* Color of the scrollbar thumb on hover in Microsoft Edge */
-        }
-
-        /*  */
-        .chatbox {
-            display: flexbox;
-            flex-wrap: wrap;
-        }
-        button{
-            background-color: transparent;
-            border: solid 1px white;
-            border-radius: 30px;
-            box-shadow: 12px 12px 24px rgba(89, 184, 174, 0.64);
-            transition: all 0.3s ease-in-out 0s;
-            cursor: pointer;
-            outline: none;
-            position: relative;
-         }
-         .typeMessage{
-            background-color: rgb(66, 109, 109);
-            border: solid 1px white;
-            border-radius: 30px;
-         }
-         #typeMessageBox::placeholder {
-            color: white; /* Replace "your-color" with the desired color value */
-        }
-         .messages{
-            font-family:monospace;
-            font-size: 12px;
-            color: white;
-         }
-         .sendMessageBtn{
-            background-color: transparent;
-            border: solid 1px white;
-            border-radius: 30px;
-
-         }
-         .sendMessageBtn:hover{
-            background-color: rgb(66, 109, 109);
-         }
-         input{
-            color: rgb(104, 158, 202);
-         }
+      /*  */
+      .chatbox {
+        display: flexbox;
+        flex-wrap: wrap;
+      }
+      button {
+        background-color: transparent;
+        border: solid 1px white;
+        border-radius: 30px;
+        box-shadow: 12px 12px 24px rgba(89, 184, 174, 0.64);
+        transition: all 0.3s ease-in-out 0s;
+        cursor: pointer;
+        outline: none;
+        position: relative;
+      }
+      .typeMessage {
+        background-color: rgb(66, 109, 109);
+        border: solid 1px white;
+        border-radius: 30px;
+      }
+      #typeMessageBox::placeholder {
+        color: white; /* Replace "your-color" with the desired color value */
+      }
+      .messages {
+        font-family: monospace;
+        font-size: 12px;
+        color: white;
+      }
+      .sendMessageBtn {
+        background-color: transparent;
+        border: solid 1px white;
+        border-radius: 30px;
+      }
+      .sendMessageBtn:hover {
+        background-color: rgb(66, 109, 109);
+      }
+      input {
+        color: rgb(104, 158, 202);
+      }
     </style>
-</head>
-<body class="container-fluid">
+  </head>
+  <body class="container-fluid">
     <nav class="navbar navbar-expand-lg">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse mx-auto navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav align-middle">
-            <li class="nav-item playersList">
-                <div class="align-middle">
-                    <button class="btn btn-primary playerListBtn shadow-lg p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
-                        Players List
-                    </button>
-                    <div class="playerListDiv">
-                        <div class="collapse collapse-horizontal"   id="collapseWidthExample">
-                            <div class="card card-body">
-                                <ul>
-                                    <li class="text-light playersName" id=""><%=firstName %></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="collapse mx-auto navbar-collapse justify-content-end"
+        id="navbarNav"
+      >
+        <ul class="navbar-nav align-middle">
+          <li class="nav-item playersList">
+            <div class="align-middle">
+              <button
+                class="btn btn-primary playerListBtn shadow-lg p-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseWidthExample"
+                aria-expanded="false"
+                aria-controls="collapseWidthExample"
+              >
+                Players List
+              </button>
+              <div class="playerListDiv">
+                <div
+                  class="collapse collapse-horizontal"
+                  id="collapseWidthExample"
+                >
+                  <div class="card card-body">
+                    <ul>
+                      <li class="text-light playersName" id="">
+                        <%=firstName %>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-            </li>
-            <li class="nav-item active m-2 fill">
-                <button class="shadow-lg" id="fill">Fill</button>
-            </li>
-            <li class="nav-item m-2 done">
-                <button class="shadow-lg" id="done" onclick="getPlayersList()">Done</button>
-            </li>
-            <li class="nav-item m-2">
-                <button class="shadow-lg" id="exit">Exit</button>
-            </li>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item active m-2 fill">
+            <button class="shadow-lg bg-info" id="fill">Fill</button>
+          </li>
+          <li class="nav-item m-2 done">
+            <button class="shadow-lg bg-info" id="done">Done</button>
+          </li>
+          <li class="nav-item m-2">
+            <button class="shadow-lg bg-info" id="exit">Exit</button>
+          </li>
+          <li>
+            <button class="shadow-lg bg-info" id="mute" >mute</button>
+          </li>
         </ul>
-        </div>
+      </div>
     </nav>
     <div class="container text-center menu p-3">
-        <div class="displayNumber p-3">
-            <h1 class="display-1 text-info" id="recentNumber">Num</h1>
-        </div>
+      <div class="displayNumber p-3 bg-light">
+        <h1 class="display-1" id="recentNumber" style="color: gray;">Num</h1>
+      </div>
     </div>
     <div class="main">
-        <div class="chatbox p-2">
-            <div class="messageArea p-3 overflow-auto">
-            </div>
-            <div>
-                <input type="text" placeholder="Type your Message" class="p-2 typeMessage text-white" id="typeMessageBox">
-                <button type="button" id="sendMessageBtn" class="sendMessageBtn text-white">Send</button>
-            </div>
+      <div class="chatbox p-2">
+        <div class="messageArea p-3 overflow-auto"></div>
+          <input
+            type="text"
+            placeholder="Type your Message"
+            class="p-2 typeMessage text-white"
+            id="typeMessageBox"
+          />
+          <button
+            type="button"
+            id="sendMessageBtn"
+            class="sendMessageBtn text-white"
+          >
+            Send
+          </button>
+      </div>
+      <div class="container text-center mx-auto my-auto text-center gameBoard">
+        <div class="d-flex justify-content-center">
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
         </div>
-        <div class="container text-center mx-auto my-auto  text-center gameBoard">
-                <div class=" d-flex justify-content-center">
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                </div>
-                <div class="d-flex justify-content-center  pt-1">
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                </div>
-                <div class=" d-flex justify-content-center pt-1">
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                </div>
-                <div class="d-flex justify-content-center pt-1">
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                </div>
-                <div class="d-flex justify-content-center pt-1 pb-1">
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                    <div class=""><input type="number" class="fields"></div>
-                </div>
-        </div> 
+        <div class="d-flex justify-content-center pt-1">
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+        </div>
+        <div class="d-flex justify-content-center pt-1">
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+        </div>
+        <div class="d-flex justify-content-center pt-1">
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+        </div>
+        <div class="d-flex justify-content-center pt-1 pb-1">
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+          <div class=""><input type="number" class="fields" /></div>
+        </div>
+      </div>
     </div>
     <audio id="audioButton" src="../../assests/audio/2.wav" autoplay></audio>
-    <audio class="bg-danger"  id="gameAudio"  src="../../assests/audio/Fluffing-a-Duck.mp3" autoplay loop></audio>
+    <audio
+      class="bg-danger"
+      id="gameAudio"
+      src="../../assests/audio/Fluffing-a-Duck.mp3"
+      autoplay
+      loop
+    ></audio>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-    </script>
-        <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+      integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz"
+      crossorigin="anonymous"
+    ></script>
     <script src="../../controller/cookies.js"></script>
 
     <script>
-        const socket = io();
-        socket.on('connect',()=>{
-            let bingoNumbers = [];
-            let gameId = `<%= gameId%>`
-            let doneButton = document.getElementById("done");
-            let fillButton = document.getElementById("fill");
-            let fields = document.querySelectorAll(".fields");
-            let audio = document.querySelector("#audioButton");
-            let gameAudio = document.querySelector("#gameAudio");
-            let firstName = `<%= firstName %>`
-            
+      const socket = io();
+      socket.on("connect", () => {
+        let bingoNumbers = [];
+        let gameId = `<%= gameId%>`;
+        let doneButton = document.getElementById("done");
+        let fillButton = document.getElementById("fill");
+        let fields = document.querySelectorAll(".fields");
+        let audio = document.querySelector("#audioButton");
+        let gameAudio = document.querySelector("#gameAudio");
+        let firstName = `<%= firstName %>`;
 
-        
-            //count is the variable that says the number of times the user has clicked on the unique numbers. It also helps us to find the players turn by doing count%playersList.length. This gives us the index of the current player in the playersList array whose turn is to play the game.
-            let count = 0;
+        let playerState;
+        let playersList;
+        let userId;
+        let playerBoard;
+        let gameDocument;
+        let isPlayerTurn = false;
+        // flag to check if the boxes are filled or not.
+        let isFilled = false;
+        // check if the player isDone or not. isDone reflects if the player is satisfied with their bingo layout
+        let isDone = false;
 
-            // flag to check if the boxes are filled or not.
-            let isFilled = false;
-            //check if the players is isDone or not. isDone reflects if the player is satisfied with their bingo layout
-            //isDone checks whether the elements are set to non editable or not.
-            let isDone= false;        
-            // get the lists of players and the userId for the self user.
-            
-            let playersList;
-            let userId;
-            async function getPlayersList(){
-                try {
-                    const response = await axios({
-                        method: 'post',
-                        url: '/gameBoard/getPlayersList',
-                        headers: {
-                            'Authorization': `Bearer ${cookies.get('jwt')}`
-                    },
-                        data: {
-                            gameId: gameId,
-                        }
-                 });
-            
-                    playersList = response.data.playerList;
-                    userId = response.data.userId;
-
-                    console.log("Players list is :  ", playersList);
-                    console.log("User ID:", userId);
-
-                }
-                catch (error) {
-                    console.error("Error fetching the players list" + error);   
-                }
-            }
-            getPlayersList();
-
-            socket.on('playersTurn',currentTurn=>{
-                console.log(`It's player ${playersList[count % playersList.length]}'s turn`);
-                count = currentTurn;
-            })
-               // this function is used to increase the counter of the players turn locally. This is used to check the players turn and then send the playersTurn event to the server.
-               function endTurn() {
-                    count++;
-                    socket.emit('playersTurn',count);
-            }
-
-            // create a room
-            socket.emit('createRoom',{gameId:gameId});
-            // function that handles the message functionality
-            $("#sendMessageBtn").click(function(){
-                let message = $("#typeMessageBox").val();
-                socket.emit('sendMessage',{firstName:firstName,message:message, gameId:gameId});
-                $("#typeMessageBox").val("");
-            })
-            socket.on('sendMessage',(data)=>{
-                // get the name and the message from the sendMessage data
-                let message = data.message;
-                let firstName = data.firstName;
-                 // Create a new <p> element with the message content
-                let newMessage = $('<p>').addClass('messages').text(firstName + ': ' + message);
-                //append the name and the data to the .messageArea div
-                $(".messageArea").append(newMessage);
-            })
-            
-            // axios({
-            //     method: 'get',
-            //     url: '/game/gamePage', // Update the URL to your protected profile route
-            //     headers: {
-            //         'Authorization': `Bearer ${cookies.get('jwt')}`
-            //     }
-            // })
-            // .then(function (response) {
-            
-            // })
-            // .catch(function (error) {
-            //     if (error.response.status === 401) {
-            //     alert(error.response.data.message);
-            //     window.location.href = '/login';
-            //     }
-            //     else {
-            //     console.log("Error is "+ error);
-            //     }
-            // });
-            // this stores the BingoNumbers for a user. These are in random order ranging from 1 to 25. We update it to our numbers once we finalise our bingoBoard with the numbers.     
-            // Makes the input field read only. Do it in the server side so that it is not easy to manipulate
-            $(".fields").prop('readonly', true);
-            doneButton.addEventListener('click', function(){
-                if (isFilled){
-                    done();
-                }
-                else {
-                    alert('Please fill the boxes first!')
-                }
+        // Function to initialize game by getting player state and board
+        async function initGame() {
+          try {
+            const playersResponse = await axios({
+              method: "post",
+              url: "/gameBoard/getPlayersList",
+              headers: {
+                Authorization: `Bearer ${cookies.get("jwt")}`,
+              },
+              data: {
+                gameId: gameId,
+              },
             });
 
-            // this function is used to set the gameBoard for the user. This is done by setting the numbers in the input fields to the numbers that are generated by the server.
-            function done(){ 
-                $(".fill").css("display","none");
-                $(".done").css("display","none");
-                $("#audioButton").css("display","none");
-                isDone = true;
-                for (let i= 0; i<25; i++){
-                    fields[i].setAttribute('readonly', true);
-                }
-                console.log(bingoNumbers + " inside the done event funciton!")
-                // axios call to set the gameBoard for this player
-                axios({
-                    method : 'post',
-                    url : '/gameBoard/setBingoNumber',
+            playersList = playersResponse.data.playerList;
+            userId = playersResponse.data.userId;
+
+            const stateResponse = await axios({
+              method: "post",
+              url: "/gameBoard/getPlayerState",
+              headers: {
+                Authorization: `Bearer ${cookies.get("jwt")}`,
+              },
+              data: {
+                gameId: gameId,
+                userId: userId,
+              },
+            });
+
+            playerState = stateResponse.data;
+            playerBoard = playerState.playerState.board;
+            isFilled = playerState.playerState.isFilled;
+
+            // get the game document
+            const gameDocumentResponse = await axios({
+              method: "post",
+              url: "/gameBoard/getEntireGame",
+              headers: {
+                Authorization: `Bearer ${cookies.get("jwt")}`,
+              },
+              data: {
+                gameId: gameId,
+              },
+            });
+            
+            console.log("Game document is " +JSON.stringify(gameDocumentResponse.data.gameDocument));
+            gameDocument = gameDocumentResponse.data.gameDocument;
+
+            const player = gameDocument.bingoBoard.playerStates.find(player => player.userId === userId);
+            isPlayerTurn = player.isTurn;
+            console.log("Is player turn: " +isPlayerTurn + " for the user " +userId);
+            if(gameDocument.bingoBoard.numbers.length > 0) {
+              $("#recentNumber").text(gameDocument.bingoBoard.numbers[gameDocument.bingoBoard.numbers.length - 1]);
+            }
+
+          } catch (error) {
+            console.error("Error during requests: ", error);
+          }
+        }
+        // Call initGame and reapply event listeners after the state is loaded
+        initGame().then(() => {
+          let bingoNumbersFromPlayerboard = [];
+
+          console.log("Player board is " +playerBoard);
+          console.log("Player state is " +JSON.stringify(playerState));
+          console.log("Player list is " +playersList);
+
+          if (isFilled) {
+            isDone = true;
+            document.getElementById("done").style.display = "none";
+            document.getElementById("fill").style.display = "none";
+
+            for (let rows = 0; rows < 5; rows++) {
+              for (let cols = 0; cols < 5; cols++) {
+                bingoNumbersFromPlayerboard.push(playerBoard[rows][cols]);
+              }
+            }
+
+            // Fill the bingoBoard with numbers from playerBoard
+            for (let i = 0; i < 25; i++) {
+              fields[i].setAttribute("value", bingoNumbersFromPlayerboard[i]);
+              if (fields[i].value == 0) {
+                fields[i].style.backgroundColor = "purple";
+                fields[i].style.pointerEvents = "none";
+              }
+            }
+          }
+
+          // Apply event listeners for field clicks
+          addFieldClickListeners();
+
+          // Event listener for "done" button
+          doneButton.addEventListener("click", function () {
+            if (isFilled && !isDone) {
+              done();
+            } else {
+              alert("Please fill the boxes first!");
+            }
+          });
+
+          // Event listener for "fill" button
+          fillButton.addEventListener("click", fill);
+
+          // Event listener for message send button
+          $("#sendMessageBtn").click(function () {
+            let message = $("#typeMessageBox").val();
+            if (message.trim() !== "") {
+              socket.emit("sendMessage", {
+                firstName: firstName,
+                message: message,
+                gameId: gameId,
+              });
+            }
+            $("#typeMessageBox").val("");
+          });
+
+          // Socket event for receiving messages
+          socket.on("sendMessage", (data) => {
+            console.log("Message received");
+            let message = data.message;
+            let firstName = data.firstName;
+            let newMessage = $("<p>")
+              .addClass("messages")
+              .text(firstName + ": " + message);
+            $(".messageArea").append(newMessage);
+          });
+
+          // Socket event for receiving crossed numbers
+          socket.on("bingoNumberCrossed", (data) => {
+            console.log("Crossed number received");
+            let bingoBlockValue = data.value;
+            console.log(bingoBlockValue);
+            $('input[value="' + bingoBlockValue + '"]').css(
+              "background-color",
+              "purple"
+            );
+            $('input[value="' + bingoBlockValue + '"]').css(
+              "pointer-events",
+              "none"
+            );
+            $('input[value="' + bingoBlockValue + '"]').val(0);
+            $("#recentNumber").text(bingoBlockValue);
+          });
+
+          socket.on("updatePlayerTurn", (data) => {
+            console.log("Player turn updated");
+            console.log("Data is " +JSON.stringify(data));
+            gameDocument = data.gameDocument;
+            console.log("Game document is on socket" +JSON.stringify(gameDocument));
+            const player = gameDocument.bingoBoard.playerStates.find(player => player.userId === userId);
+            isPlayerTurn = player.isTurn;
+            console.log("Is player turn: on socket is " +isPlayerTurn + " for the user " +userId);
+          });
+
+          // Socket event for checking winner
+          socket.on("checkWinner", (data) => {
+            if (data.winner) {
+              console.log("Winner found");
+            }
+          });
+        });
+
+        function updatePlayerTurn() {
+                let numberOfPlayers = playersList.length;
+                let playerIndex = gameDocument.bingoBoard.playerStates.findIndex(p => p.userId === userId);
+                let nextPlayerIndex = (playerIndex + 1) % numberOfPlayers;
+                // update the player turn in the gameDocument to false for the current player and true for the next player. Curent player is the one who just clicked a bingo number
+                gameDocument.bingoBoard.playerStates[playerIndex].isTurn = false;
+                gameDocument.bingoBoard.playerStates[nextPlayerIndex].isTurn = true;
+        }
+
+        socket.on("updateGameDocument", (data) => {
+          gameDocument = data.gameDocument;
+          console.log("Game document updated");
+          console.log("Game document is " +JSON.stringify(gameDocument));
+
+        });
+
+        // Function to add click listeners to fields for crossing numbers
+        function addFieldClickListeners() {
+          for (let i = 0; i < fields.length; i++) {
+            fields[i].addEventListener("click", function () {
+              if (isDone) {
+                audio.playbackRate = 3;
+                audio.play();
+                if (isPlayerTurn) {
+                  fields[i].style.pointerEvents = "none";
+                  fields[i].classList.remove("hover");
+                  let crossedNumber = fields[i].value;
+                  axios({
+                    method: "post",
+                    url: "/gameBoard/crossTheNumber",
                     headers: {
-                        'Authorization': `Bearer ${cookies.get('jwt')}`
+                      Authorization: `Bearer ${cookies.get("jwt")}`,
                     },
-                    data:{
-                        gameId:gameId,
-                        numbers : bingoNumbers
-                    }
-                })
-                .then(function(response){
-                    alert(response.data.message);
-                })
-                .catch(function(error){
-                    alert(response.data.message);
-                })
-                // this block of code is to cross the numbers whenever the users clicks on the numbers,or we can just change the color of the blocks.
-                // First we have to make sure, the numbers are set Done i.e they are read only afer we click the done button, or the Done button and we have to store the numbers click on some sort of grid.
-                console.log("The players list before is is " + JSON.stringify(playersList));
-                if(isDone && playersList[count%playersList.length] == userId){ 
-                    for(let i = 0; i < fields.length; i++){  
-                        fields[i].addEventListener('click',function(){
-                                console.log("clicked the current count is " + count )    
-                                audio.playbackRate = 3;
-                                audio.play();
-                                fields[i].style.pointerEvents = 'none';
-                                fields[i].classList.remove("hover");
-                                let crossedNumber = fields[i].value;
-                                axios({
-                                    method:'post',
-                                    url: '/gameBoard/crossTheNumber',
-                                    headers: {
-                                        'Authorization': `Bearer ${cookies.get('jwt')}`
-                                    },
-                                    data: {
-                                        number: crossedNumber,
-                                        gameId: gameId
-                                    }
-                                })
-                                .then(function(response){
-                                    fields[i].style.backgroundColor = 'purple';
-                                    socket.emit('bingoNumberCrossed', { gameId, value: field.value });
-                                    endTurn(); // Move to next player
-                                    // once the number is purple on the user, send the bingoCrossed event the server and then the server will broadcast to all the other users.
-                                    data = {
-                                        gameId: `<%= gameId%>`,
-                                        value: fields[i].value
-                                    }
-                                    socket.emit('bingoNumberCrossed', data)
+                    data: {
+                      number: crossedNumber,
+                      gameId: gameId,
+                    },
+                  })
+                    .then(function (response) {
+                      fields[i].style.backgroundColor = "purple";
+                      socket.emit("bingoNumberCrossed", {
+                        gameId: gameId,
+                        value: fields[i].value,
+                      });
+                      fields[i].value = 0;
+                      data = {
+                      gameId: gameId,
+                      userId: userId,
+                      number: crossedNumber,
+                      gameDocument: gameDocument
+                    };
+  
+                    // update the player turn in the database.
+                    axios({
+                      method: "post",
+                      url: "/gameBoard/updatePlayerTurn",
+                      headers: {
+                        Authorization: `Bearer ${cookies.get("jwt")}`,
+                      },
+                      data: data,
+                    })
+                    .then(function (response) {
+                      if(response.status === 200) {
+                        console.log("Player turn updated");
+                      }
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      alert(error);
+                    });
+                    
+                    // once the player turn has been updated, we do the same logic to update the player turn  in client side. We only reload the gameDocument if the user reconnects.
+                    // only in this case we will have to check if the user is the current player or not by getting the data from the server.
+  
+                    updatePlayerTurn();
+                    console.log("Is player turn: " +isPlayerTurn + " for the user " +userId);
+                    socket.emit('updatePlayerTurn', data);
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      alert(error);
+                    });
 
-                                    axios({
-                                            method:'post',
-                                        url: '/game/checkWinner',
-                                        headers: {
-                                            'Authorization': `Bearer ${cookies.get('jwt')}`
-                                        },
-                                        data: {
-                                            gameId: gameId
-                                        }
-                                    })
-                                    .then(function(response){
-                                        console.log("This is the test to check the winner")
-                                    })
-                                    .catch(function(error){
-                                        console.log(error)
-                                    })
-                                })
-                                .catch(function(error){
-                                    console.log(error);
-                                    alert(error)
-                                })
-                            });
-                    } 
-                } 
-            }
-            // Fills the numbers randomly generated in the database
-            fillButton.addEventListener('click',fill);
-            function fill(){
-                isFilled = true;
-                gameAudio.play();
-                axios({
-                    method:'post',
-                    url : '/gameBoard/getNumbers',
-                    headers: {
-                        'Authorization': `Bearer ${cookies.get('jwt')}`
-                    }
-                })
-                .then(function(response){
-                    let listOfNumbers = response.data.listOfNumbers;
-                    bingoNumbers = listOfNumbers;
-                    console.log(bingoNumbers + " inside the fill funciton!")
-                    for (let i= 0; i<25; i++){
-                        //inputs[i].value='0';
-                        fields[i].setAttribute('value',listOfNumbers[i]);
-                    }
-                })
-                .catch(function(error){
-                    console.log(error);
-                    console.log("Error in fill function")
-                })
-            }
-            socket.on('bingoNumberCrossed',(data)=>{
-                let bingoBlockValue = data.value;
-                $('input[value="' + bingoBlockValue + '"]').css('background-color', 'purple');
-                $('#recentNumber').text(bingoBlockValue);      
-            })
-            socket.on('checkWinner',(data)=>{ 
-                if(data.winner){
-                    console.log("Winner found")
-
+  
                 }
-            })
-        })
-</script>
+                else {
+                  alert("It is not your turn!");
+                }
 
-</body>
+              }
+              else {
+                alert("Please click on the fill button first!");
+              }
+            });
+          }
+        }
+        // set the input fields to read only so that the user can not input any of their own numbers.
+        for (let i = 0; i < 25; i++) {
+          fields[i].setAttribute("readonly", true);
+        }
+        // Function to handle "done" action
+        function done() {
+          $(".fill").css("display", "none");
+          $(".done").css("display", "none");
+          $("#audioButton").css("display", "none");
+          isDone = true;
+          axios({
+            method: "post",
+            url: "/gameBoard/setBingoNumber",
+            headers: {
+              Authorization: `Bearer ${cookies.get("jwt")}`,
+            },
+            data: {
+              gameId: gameId,
+              numbers: bingoNumbers,
+              userId: userId,
+            },
+          })
+            .then(function (response) {
+              alert(response.data.message);
+            })
+            .catch(function (error) {
+              alert(error.response.data.message);
+            });
+        }
+
+        // Function to fill the board with random numbers
+        function fill() {
+          isFilled = true;
+          gameAudio.play();
+
+          axios({
+            method: "post",
+            url: "/gameBoard/getNumbers",
+            headers: {
+              Authorization: `Bearer ${cookies.get("jwt")}`,
+            },
+          })
+            .then(function (response) {
+              let listOfNumbers = response.data.listOfNumbers;
+              bingoNumbers = listOfNumbers;
+
+              for (let i = 0; i < 25; i++) {
+                fields[i].setAttribute("value", listOfNumbers[i]);
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+              console.log("Error in fill function");
+            });
+        }
+      });
+    </script>
+  </body>
 </html>

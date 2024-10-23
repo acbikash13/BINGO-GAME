@@ -1,10 +1,9 @@
 const databasePromise = require('../apiHandler/databaseConnector');
 
-// checkUser functions returns the userId if the user is authorized
+// checkUser function returns the userId if the user is authorized
 // if the user is not authorized, it returns false.
 // it checks whether the user is valid or not based on the jtw token we get from the client.
 // if there is a valid jwt token, it returns the user's ID else it returns false.
-
 async function checkUser(token) {
     const database = await databasePromise;
 	const collection =  database.collection('users');

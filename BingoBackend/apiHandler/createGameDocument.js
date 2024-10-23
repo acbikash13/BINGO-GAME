@@ -11,6 +11,7 @@ function createGameDocument(){
               userId: "userId",
               role: "host/joinee",
               isReady : false,
+              isFilled: false,
               isTurn : false,
               displayName: "firstName",
               board: [
