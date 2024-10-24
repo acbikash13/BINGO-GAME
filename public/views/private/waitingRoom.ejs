@@ -64,19 +64,29 @@
       #startGame {
         display: none;
       }
-      @keyframes moveCircleAndChangeColor {
-        0% {
-          transform: translateX(0); /* Initial position */
-          fill: red; /* Start color */
+      /* Define the movement and color change for the animated circle */
+      .animate-circle {
+        animation: move-right 0.5s forwards, change-color 0.5s forwards;
+      }
+
+      /* Animation to move the circle to the right */
+      @keyframes move-right {
+        from {
+          cx: 3;
         }
-        100% {
-          transform: translateX(50px); /* Move the circle to the right */
-          fill: green; /* End color */
+        to {
+          cx: 9;
         }
       }
 
-      .animate-circle {
-        animation: moveCircleAndChangeColor 1s ease-in-out forwards;
+      /* Animation to change the circle color to green */
+      @keyframes change-color {
+        from {
+          fill: red;
+        }
+        to {
+          fill: green;
+        }
       }
     </style>
   </head>
@@ -180,15 +190,37 @@
           for (let userId in playersFirstNameAndId) {
             $("ol").append(`
             <li class="custom-p">${playersFirstNameAndId[userId]} 
-            <!-- Your SVG with the toggle and circle -->
-                <!-- SVG with correct path and animation -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" id="${userId}" class="bi bi-toggle2-on" viewBox="0 0 16 16">
-                <!-- First path (toggle background) -->
-                <path d="M7 5H3a3 3 0 0 0 0 6h4a5 5 0 0 1-.584-1H3a2 2 0 1 1 0-4h3.416q.235-.537.584-1"/>
-                
-                <!-- Second path (circle to animate) -->
-                <circle cx="2" cy="8" r="3" class="circle-path" fill="red" />
-                </svg>
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id = "${userId}">
+            <!-- Track -->
+            <path 
+                d="M3 5
+                h5.5
+                a3 3 0 0 1 3 3
+                v0
+                a3 3 0 0 1 -3 3
+                h-5.5
+                a3 3 0 0 1 -3 -3
+                v0
+                a3 3 0 0 1 3 -3
+                z"
+                class = "rectangle-path"
+                fill="none"
+                stroke="red"
+                stroke-width="0.3"
+            />
+            
+            <!-- Toggle circle -->
+            <circle 
+                cx="3" 
+                cy="8" 
+                r="2" 
+                fill="white"
+                stroke="#94a3b8"
+                class = "toggle-circle"
+                stroke-width="0.1"
+                filter="drop-shadow(0 1px 1px rgb(0 0 0 / 0.1))"
+            />
+            </svg>
             </li>`);
           }
         }
@@ -251,8 +283,11 @@
       socket.on("isReady", (data) => {
         let userIdForThisClient = data.userId;
         $("#" + userIdForThisClient)
-          .find(".circle-path")
+          .find(".toggle-circle")
           .addClass("animate-circle");
+          $("#" + userIdForThisClient)
+          .find(".rectangle-path")
+          .css("stroke", "green");
       });
       socket.on("startGame", (data) => {
         alert(data);
