@@ -5,7 +5,7 @@ console.log("The Uri is " + uri )
 const databaseName = process.env.DATABASE_NAME;
 
 const { MongoClient} = require('mongodb');
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient("mongodb+srv://acharyab2:VAYFt5gtX9DkoRvq@acharyab2.wg17b1q.mongodb.net/?retryWrites=true&w=majority&appName=acharyab2", { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function connectToDatabase() {
     let db;
