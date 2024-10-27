@@ -19,14 +19,12 @@ async function main() {
   // takes an GaxiosOptions object.  Visit https://github.com/JustinBeckwith/gaxios.
   const url = 'https://people.googleapis.com/v1/people/me?personFields=names';
   const res = await oAuth2Client.request({url});
-  console.log(res.data);
 
   // After acquiring an access_token, you may want to check on the audience, expiration,
   // or original scopes requested.  You can do that with the `getTokenInfo` method.
   const tokenInfo = await oAuth2Client.getTokenInfo(
     oAuth2Client.credentials.access_token
   );
-  console.log(tokenInfo);
 }
 
 /**
@@ -59,7 +57,6 @@ function getAuthenticatedClient() {
             const qs = new url.URL(req.url, 'http://localhost:3000')
               .searchParams;
             const code = qs.get('code');
-            console.log(`Code is ${code}`);
             res.end('Authentication successful! Please return to the console.');
             server.destroy();
 

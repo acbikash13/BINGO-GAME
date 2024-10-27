@@ -105,8 +105,7 @@ router.route("/setReady")
         }
     }
     catch(error) {
-        console.error(error);
-        return { status: 500, message: "An unexpected error occurred. Please try again later." };
+        return { status: 500, message: "An unexpected error occurred while setting the ready status. Please try again later." };
     }
 });
 module.exports = router;

@@ -11,6 +11,12 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap"
+      rel="stylesheet"
+    />
     <style>
       button {
         border: white;
@@ -34,7 +40,7 @@
       }
       .display-1 {
         font-weight: 400;
-        font-family: fantasy;
+        font-family: "Rubik Bubbles", sans-serif;
       }
       .main {
         display: flex;
@@ -220,6 +226,18 @@
       input {
         color: rgb(104, 158, 202);
       }
+      .bingo-count {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 30px;
+        font-family: "Rubik Bubbles", sans-serif;
+        border-radius: 20px;
+      }
+      .bingo-letters {
+        font-family: "Rubik Bubbles", sans-serif;
+      }
     </style>
   </head>
   <body class="container-fluid">
@@ -278,32 +296,39 @@
             <button class="shadow-lg bg-info" id="exit">Exit</button>
           </li>
           <li>
-            <button class="shadow-lg bg-info" id="mute" >mute</button>
+            <button class="shadow-lg bg-info" id="mute">mute</button>
           </li>
         </ul>
       </div>
     </nav>
     <div class="container text-center menu p-3">
       <div class="displayNumber p-3 bg-light">
-        <h1 class="display-1" id="recentNumber" style="color: gray;">Num</h1>
+        <h1 class="display-1" id="recentNumber" style="color: gray">Num</h1>
+      </div>
+      <div class="bingo-count bg-light p-2 text-center shadow-lg">
+        <p class="bingo-letters display-2" id="1">B</p>
+        <P class="bingo-letters display-2" id="2">I</P>
+        <p class="bingo-letters display-2" id="3">N</p>
+        <p class="bingo-letters display-2" id="4">G</p>
+        <p class="bingo-letters display-2" id="5">O</p>
       </div>
     </div>
     <div class="main">
       <div class="chatbox p-2">
         <div class="messageArea p-3 overflow-auto"></div>
-          <input
-            type="text"
-            placeholder="Type your Message"
-            class="p-2 typeMessage text-white"
-            id="typeMessageBox"
-          />
-          <button
-            type="button"
-            id="sendMessageBtn"
-            class="sendMessageBtn text-white"
-          >
-            Send
-          </button>
+        <input
+          type="text"
+          placeholder="Type your Message"
+          class="p-2 typeMessage text-white"
+          id="typeMessageBox"
+        />
+        <button
+          type="button"
+          id="sendMessageBtn"
+          class="sendMessageBtn text-white"
+        >
+          Send
+        </button>
       </div>
       <div class="container text-center mx-auto my-auto text-center gameBoard">
         <div class="d-flex justify-content-center">
@@ -377,6 +402,7 @@
         let fields = document.querySelectorAll(".fields");
         let audio = document.querySelector("#audioButton");
         let gameAudio = document.querySelector("#gameAudio");
+        let bingoLetters = document.querySelectorAll(".bingo-letters");
         let firstName = `<%= firstName %>`;
 
         let playerState;
@@ -384,11 +410,14 @@
         let userId;
         let playerBoard;
         let gameDocument;
+        let bingoCount;
         let isPlayerTurn = false;
         // flag to check if the boxes are filled or not.
         let isFilled = false;
         // check if the player isDone or not. isDone reflects if the player is satisfied with their bingo layout
         let isDone = false;
+        // once this flag is set to true, the game is completed and the player can not click on the boxes anymore. We simply exit the game.
+        let isGameCompleted = false;
 
         // Function to initialize game by getting player state and board
         async function initGame() {
@@ -407,6 +436,7 @@
             playersList = playersResponse.data.playerList;
             userId = playersResponse.data.userId;
 
+            // get player state gets the player state for one player that contains the board, isFilled and bingoCount and other information just for that player.
             const stateResponse = await axios({
               method: "post",
               url: "/gameBoard/getPlayerState",
@@ -422,7 +452,22 @@
             playerState = stateResponse.data;
             playerBoard = playerState.playerState.board;
             isFilled = playerState.playerState.isFilled;
+            bingoCount = playerState.playerState.bingoCount;
+            console.log("the bingo count is " + bingoCount);
+            for (let i = 1; i <= bingoCount; i++) {
+              bingoLetters[i].style.color = "green";
+            }
 
+            for (let i = 0; i < bingoCount; i++) {
+              $(`#${i}`).css("color", "green");
+            }
+            if (bingoCount === 5) {
+              isGameCompleted = true;
+              alert(
+                "COngratulations! " + firstName + " You have won the game!!"
+              );
+            }
+            console.log("bingo Count is " + bingoCount);
             // get the game document
             const gameDocumentResponse = await axios({
               method: "post",
@@ -434,17 +479,25 @@
                 gameId: gameId,
               },
             });
-            
-            console.log("Game document is " +JSON.stringify(gameDocumentResponse.data.gameDocument));
+
             gameDocument = gameDocumentResponse.data.gameDocument;
 
-            const player = gameDocument.bingoBoard.playerStates.find(player => player.userId === userId);
+            const player = gameDocument.bingoBoard.playerStates.find(
+              (player) => player.userId === userId
+            );
+            const playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
+              (player) => player.userId === userId
+            );
             isPlayerTurn = player.isTurn;
-            console.log("Is player turn: " +isPlayerTurn + " for the user " +userId);
-            if(gameDocument.bingoBoard.numbers.length > 0) {
-              $("#recentNumber").text(gameDocument.bingoBoard.numbers[gameDocument.bingoBoard.numbers.length - 1]);
+            bingoCount = player.bingoCount;
+            console.log("The bingoCount is " + bingoCount);
+            if (gameDocument.bingoBoard.numbers.length > 0) {
+              $("#recentNumber").text(
+                gameDocument.bingoBoard.numbers[
+                  gameDocument.bingoBoard.numbers.length - 1
+                ]
+              );
             }
-
           } catch (error) {
             console.error("Error during requests: ", error);
           }
@@ -452,10 +505,6 @@
         // Call initGame and reapply event listeners after the state is loaded
         initGame().then(() => {
           let bingoNumbersFromPlayerboard = [];
-
-          console.log("Player board is " +playerBoard);
-          console.log("Player state is " +JSON.stringify(playerState));
-          console.log("Player list is " +playersList);
 
           if (isFilled) {
             isDone = true;
@@ -477,7 +526,6 @@
               }
             }
           }
-
           // Apply event listeners for field clicks
           addFieldClickListeners();
 
@@ -508,7 +556,6 @@
 
           // Socket event for receiving messages
           socket.on("sendMessage", (data) => {
-            console.log("Message received");
             let message = data.message;
             let firstName = data.firstName;
             let newMessage = $("<p>")
@@ -519,9 +566,7 @@
 
           // Socket event for receiving crossed numbers
           socket.on("bingoNumberCrossed", (data) => {
-            console.log("Crossed number received");
             let bingoBlockValue = data.value;
-            console.log(bingoBlockValue);
             $('input[value="' + bingoBlockValue + '"]').css(
               "background-color",
               "purple"
@@ -532,41 +577,95 @@
             );
             $('input[value="' + bingoBlockValue + '"]').val(0);
             $("#recentNumber").text(bingoBlockValue);
-          });
-
-          socket.on("updatePlayerTurn", (data) => {
-            console.log("Player turn updated");
-            console.log("Data is " +JSON.stringify(data));
             gameDocument = data.gameDocument;
-            console.log("Game document is on socket" +JSON.stringify(gameDocument));
-            const player = gameDocument.bingoBoard.playerStates.find(player => player.userId === userId);
-            isPlayerTurn = player.isTurn;
-            console.log("Is player turn: on socket is " +isPlayerTurn + " for the user " +userId);
+            console.log("The bingo numbers after bingo numbers crossed are " +  JSON.stringify(gameDocument.bingoBoard.playerStates));
           });
-
+          socket.on("updatePlayerTurn", (data) => {
+            gameDocument = data.gameDocument;
+            console.log("The game document inside update player Turn is" + JSON.stringify(gameDocument));
+            const playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
+              (player) => player.userId === userId
+            );
+            const player = gameDocument.bingoBoard.playerStates.find(
+              (player) => player.userId === userId
+            );
+            isPlayerTurn = player.isTurn;
+          });
           // Socket event for checking winner
-          socket.on("checkWinner", (data) => {
-            if (data.winner) {
-              console.log("Winner found");
+          socket.on("winnerFound", (data) => {
+            if (data.userId === userId) {
+              alert(data.winnerName + ", you have won the game");
+              // call an axios request to update the winner in the database and then delete the game document.
+              window.location.href = "/homePage";
+            } else {
+              alert(data.winnerName + " has won the game!");
+              // call an axios request to update the winner in the database and then delete the game document.
+              window.location.href = "/homePage";
             }
           });
         });
-
         function updatePlayerTurn() {
-                let numberOfPlayers = playersList.length;
-                let playerIndex = gameDocument.bingoBoard.playerStates.findIndex(p => p.userId === userId);
-                let nextPlayerIndex = (playerIndex + 1) % numberOfPlayers;
-                // update the player turn in the gameDocument to false for the current player and true for the next player. Curent player is the one who just clicked a bingo number
-                gameDocument.bingoBoard.playerStates[playerIndex].isTurn = false;
-                gameDocument.bingoBoard.playerStates[nextPlayerIndex].isTurn = true;
+          let numberOfPlayers = playersList.length;
+          let playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
+            (p) => p.userId === userId
+          );
+          let nextPlayerIndex = (playerIndex + 1) % numberOfPlayers;
+          // update the player turn in the gameDocument to false for the current player and true for the next player. Curent player is the one who just clicked a bingo number
+          gameDocument.bingoBoard.playerStates[playerIndex].isTurn = false;
+          gameDocument.bingoBoard.playerStates[nextPlayerIndex].isTurn = true;
         }
 
-        socket.on("updateGameDocument", (data) => {
-          gameDocument = data.gameDocument;
-          console.log("Game document updated");
-          console.log("Game document is " +JSON.stringify(gameDocument));
+        function updateBingoCount(playerStateArray) {
+          console.log("The player state array is inside update bingoCOunt is  " + JSON.stringify(playerStateArray));
+          let bingoScore = 0;
+          //Traversing through row
+          for (let row = 0; row < 5; row++) {
+            count = 0;
+            for (let col = 0; col < 5; col++) {
+              if (playerStateArray[row][col] === 0) {
+                count++;
+              }
+            }
+            if (count === 5) {
+              bingoScore++;
+            }
+          }
 
-        });
+          //Traversing through column
+          for (let col = 0; col < 5; col++) {
+            count = 0;
+            for (let row = 0; row < 5; row++) {
+              if (playerStateArray[row][col] === 0) {
+                count++;
+              }
+            }
+            if (count === 5) {
+              bingoScore++;
+            }
+          }
+          //traversing the diagonal
+          // check for two diagonals
+          if (
+            playerStateArray[0][0] === 0 &&
+            playerStateArray[1][1] === 0 &&
+            playerStateArray[2][2] === 0 &&
+            playerStateArray[3][3] === 0 &&
+            playerStateArray[4][4] === 0
+          ) {
+            bingoScore++;
+          }
+          if (
+            playerStateArray[0][4] === 0 &&
+            playerStateArray[1][3] === 0 &&
+            playerStateArray[2][2] === 0 &&
+            playerStateArray[3][1] === 0 &&
+            playerStateArray[4][0] === 0
+          ) {
+            bingoScore++;
+          }
+
+          return bingoScore;
+        }
 
         // Function to add click listeners to fields for crossing numbers
         function addFieldClickListeners() {
@@ -592,60 +691,120 @@
                   })
                     .then(function (response) {
                       fields[i].style.backgroundColor = "purple";
+                      console.log("Game documen tbefore emitting bingo number crossed is " + JSON.stringify(gameDocument.bingoBoard.playerStates));
                       socket.emit("bingoNumberCrossed", {
                         gameId: gameId,
                         value: fields[i].value,
+                        gameDocument: gameDocument,
                       });
                       fields[i].value = 0;
                       data = {
-                      gameId: gameId,
-                      userId: userId,
-                      number: crossedNumber,
-                      gameDocument: gameDocument
-                    };
-  
-                    // update the player turn in the database.
-                    axios({
-                      method: "post",
-                      url: "/gameBoard/updatePlayerTurn",
-                      headers: {
-                        Authorization: `Bearer ${cookies.get("jwt")}`,
-                      },
-                      data: data,
-                    })
-                    .then(function (response) {
-                      if(response.status === 200) {
-                        console.log("Player turn updated");
+                        gameId: gameId,
+                        userId: userId,
+                        number: crossedNumber,
+                        gameDocument: gameDocument,
+                      };
+                      let playerIndex =
+                        gameDocument.bingoBoard.playerStates.findIndex(
+                          (player) => player.userId === userId
+                        );
+                      bingoCrossedNumber(crossedNumber);
+                      bingoCount = updateBingoCount(gameDocument.bingoBoard.playerStates[playerIndex].board);
+                      axios({
+                        method: "post",
+                        url: "/gameBoard/updateBingoCount",
+                        headers: {
+                          Authorization: `Bearer ${cookies.get("jwt")}`,
+                        },
+                        data: data,
+                      })
+                      .then(function (response) {
+                        if (response.status === 200) {
+                          console.log("Bingo count updated");
+                        } else {
+                          console.log("Error in updating bingo count");
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                        alert(error);
+                      });
+                  
+                      // update the player turn in the database.
+                      axios({
+                        method: "post",
+                        url: "/gameBoard/updatePlayerTurn",
+                        headers: {
+                          Authorization: `Bearer ${cookies.get("jwt")}`,
+                        },
+                        data: data,
+                      })
+                      .then(function (response) {
+                        if (response.status === 200) {
+                          console.log("Player turn updated");
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                        alert(error);
+                      });
+                      // once the player turn has been updated, we do the same logic to update the player turn  in client side. We only reload the gameDocument if the user reconnects.
+                      // only in this case we will have to check if the user is the current player or not by getting the data from the server.
+                      updatePlayerTurn();
+                      // console.log(
+                      //   "Is player turn: " +
+                      //     isPlayerTurn +
+                      //     " for the user " +
+                      //     userId
+                      // );
+                      socket.emit("updatePlayerTurn", data);
+                      for (let i = 0; i <= bingoCount; i++) {
+                        $(`#${i}`).css("color", "green");
+                      }
+                      console.log("The bingo count before emitting winnerfound is " + bingoCount);
+                      if (bingoCount === 5) {
+                        isGameCompleted = true;
+                        socket.emit("winnerFound", {
+                          gameId: gameId,
+                          gameDocument: gameDocument,
+                          winnerName: firstName,
+                          bingoCount: bingoCount,
+                          userId: userId,
+                        });
                       }
                     })
                     .catch(function (error) {
                       console.log(error);
                       alert(error);
                     });
-                    
-                    // once the player turn has been updated, we do the same logic to update the player turn  in client side. We only reload the gameDocument if the user reconnects.
-                    // only in this case we will have to check if the user is the current player or not by getting the data from the server.
-  
-                    updatePlayerTurn();
-                    console.log("Is player turn: " +isPlayerTurn + " for the user " +userId);
-                    socket.emit('updatePlayerTurn', data);
-                    })
-                    .catch(function (error) {
-                      console.log(error);
-                      alert(error);
-                    });
-
-  
-                }
-                else {
+                } else {
                   alert("It is not your turn!");
                 }
-
-              }
-              else {
+              } else {
                 alert("Please click on the fill button first!");
               }
             });
+          }
+        }
+
+        function bingoCrossedNumber(bingoNumber) {
+          let playerStatesObj = gameDocument.bingoBoard.playerStates;
+          //Now replace the bingo crossed number With the 0
+          for (let aPlayer of playerStatesObj) {
+            let bingoBoardForAPlayer = aPlayer.board;
+            // iterate through the bingoBoard and find 1
+            for (let rows = 0; rows < 5; rows++) {
+              for (let columns = 0; columns < 5; columns++) {
+                if (
+                  bingoBoardForAPlayer[rows][columns] === Number(bingoNumber)
+                ) {
+                  bingoBoardForAPlayer[rows][columns] = 0;
+                  break;
+                }
+              }
+            }
+            gameDocument.bingoBoard.playerStates = playerStatesObj;
+            gameDocument.bingoBoard.numbers.push(bingoNumber);
           }
         }
         // set the input fields to read only so that the user can not input any of their own numbers.
@@ -658,6 +817,24 @@
           $(".done").css("display", "none");
           $("#audioButton").css("display", "none");
           isDone = true;
+          let bingoBoardsAfterDone = [];
+          let playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
+            (player) => player.userId === userId
+          );
+          for (let i = 0; i < 5; i++) {
+            bingoBoardsAfterDone.push(bingoNumbers.slice(i * 5, i * 5 + 5));
+          }
+          gameDocument.bingoBoard.playerStates[playerIndex].board =
+            bingoBoardsAfterDone;
+          console.log("The game board for the player after done is " + JSON.stringify(gameDocument.bingoBoard.playerStates));
+          let dataOnDone = {
+            playerIndex: playerIndex,
+            gameId: gameId,
+            userId: userId,
+            gameDocument: gameDocument,
+          };
+          socket.emit("onDone", dataOnDone);
+
           axios({
             method: "post",
             url: "/gameBoard/setBingoNumber",
@@ -674,10 +851,14 @@
               alert(response.data.message);
             })
             .catch(function (error) {
-              alert(error.response.data.message);
+              console.log(error);
+              alert(error);
             });
         }
-
+        socket.on("onDone", (data) => {
+          gameDocument = data.gameDocument;
+          console.log("The game document inside onDone is " + JSON.stringify(gameDocument.bingoBoard.playerStates));
+        });
         // Function to fill the board with random numbers
         function fill() {
           isFilled = true;

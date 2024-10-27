@@ -36,7 +36,7 @@ async function updateUsesrInformation(userId,newData) {
 
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         return "Error Occurred in updating the information. Please try again!"
     }
 };

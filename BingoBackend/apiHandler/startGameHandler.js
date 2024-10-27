@@ -49,7 +49,6 @@ async function startGameByHost(userId,gameId) {
         // set the player's status isReady to ready.
         await setReadyForGame(userId,gameId);
         let game  =  await collection.find({gameId: Number(gameId)}).toArray();
-        console.log(game[0])
         if(game.length != 1) {
             return {status: 404, message: "Game not found!"}
         }

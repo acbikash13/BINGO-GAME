@@ -43,7 +43,6 @@ post((req,res)=> {
 
 // handle the logout function
 router.route("/api/auth/logout").post(async (req, res) => { 
-    console.log("Inside the logout route");
     const jwtToken = req.cookies['jwt'];
     const userIsValid = await isUserAuthenticated(jwtToken);
     // call the logout function which sets the jwt token to null. and then redirect the user to the login page.
@@ -107,7 +106,6 @@ get(async (req,res) => {
 router.route('/hostGame')
 .post(async (req,res) => {
     const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
-    console.log(userIsValid)
     if(userIsValid) {
         try {
             let hostedGame = await hostGame(userIsValid);
@@ -129,10 +127,8 @@ router.route('/joinGame')
     const userIsValid = await isUserAuthenticated(req.cookies['jwt']);
     if(userIsValid) {
         let gameId = req.body.gameId;
-        console.log("Game id is while joining is "+ typeof(Number(gameId)));
         try {
             let joinGameResult = await joinGame(userIsValid, Number(gameId));
-            console.log("The join Game result is " + joinGameResult.message)
             res.status(joinGameResult.status).json({ message: joinGameResult.message });
         } catch (err) {
             console.error(err);
@@ -226,7 +222,6 @@ router.route('/contact')
 router.route('/getUserId')
 .post(async (req,res)=> {
     const userIsValid =  await isUserAuthenticated(req.cookies['jwt']);
-    console.log("The use is id " +  userIsValid)
     if(userIsValid){
         res.status(200).json({userId:userIsValid});
     }

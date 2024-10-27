@@ -7,10 +7,8 @@ async function getPlayersJoinedNames(gameId) {
     const database = await databasePromise;
     const collection =  database.collection('games');
     let game =  await collection.find({gameId:Number(gameId)}).toArray();
-    console.log(game[0])
     if(game.length !=1) {
-        console.log("Game not found")
-        throw new Error('Game not found');
+        throw new Error('Game not found while getting players joined names');
     }
     let playersName = [];
     let playersJoined = game[0].bingoBoard.playersJoined

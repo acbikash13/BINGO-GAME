@@ -60,6 +60,14 @@ io.on('connection', (socket) => {
         socket.join(data.gameId);
         io.to(data.gameId).emit('playerJoined', data);
     });
+
+    socket.on('onDone', (data) => {
+        io.emit('onDone', data);
+    }); 
+    socket.on('winnerFound', (data) => {
+        io.emit('winnerFound', data);
+    }); 
+
     socket.on('isReady',(data)=>{
         io.emit('isReady', data);
     });
@@ -75,11 +83,9 @@ io.on('connection', (socket) => {
         io.emit('bingoNumberCrossed',data)
     })
     socket.on('updatePlayerTurn',(data)=>{
-        console.log ("The data for updatePlayerTurn is" + JSON.stringify(data));
         io.emit('updatePlayerTurn',data)
     })
     socket.on('sendMessage',(data)=>{
-        console.log("The data for sendMessage is" + JSON.stringify(data))
         io.emit('sendMessage',data)
     })
     socket.on('disconnect',()=> {
