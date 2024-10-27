@@ -1,6 +1,7 @@
 //This file handles the Database connection registeres in MongoDb atlas registered with acbikash13
 require('dotenv').config();
 const uri =  process.env.URI;
+console.log("The Uri is " + uri )
 const databaseName = process.env.DATABASE_NAME;
 
 const { MongoClient} = require('mongodb');
