@@ -1,6 +1,8 @@
 const databasePromise = require("./databaseConnector.js");
 const { computeBingoScore } = require("./computeBingoScore.js");
 
+
+// modify this function so that the bingo Count is updated for every players in the database.
 // this function returns the playerState of the player with the given userId in the game with the given gameId
 async function getBingoCount(gameId, userId) {
   let database = await databasePromise;

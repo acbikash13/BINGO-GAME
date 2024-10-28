@@ -418,7 +418,6 @@
         let isDone = false;
         // once this flag is set to true, the game is completed and the player can not click on the boxes anymore. We simply exit the game.
         let isGameCompleted = false;
-
         // Function to initialize game by getting player state and board
         async function initGame() {
           try {
@@ -432,7 +431,6 @@
                 gameId: gameId,
               },
             });
-
             playersList = playersResponse.data.playerList;
             userId = playersResponse.data.userId;
 
@@ -448,17 +446,16 @@
                 userId: userId,
               },
             });
-
             playerState = stateResponse.data;
             playerBoard = playerState.playerState.board;
             isFilled = playerState.playerState.isFilled;
             bingoCount = playerState.playerState.bingoCount;
             console.log("the bingo count is " + bingoCount);
-            for (let i = 1; i <= bingoCount; i++) {
-              bingoLetters[i].style.color = "green";
-            }
+            // for (let i = 1; i <= bingoCount; i++) {
+            //   bingoLetters[i].style.color = "green";
+            // }
 
-            for (let i = 0; i < bingoCount; i++) {
+            for (let i = 0; i <= bingoCount; i++) {
               $(`#${i}`).css("color", "green");
             }
             if (bingoCount === 5) {
@@ -566,7 +563,9 @@
 
           // Socket event for receiving crossed numbers
           socket.on("bingoNumberCrossed", (data) => {
+
             let bingoBlockValue = data.value;
+            gameId = data.gameId;
             $('input[value="' + bingoBlockValue + '"]').css(
               "background-color",
               "purple"
@@ -578,11 +577,47 @@
             $('input[value="' + bingoBlockValue + '"]').val(0);
             $("#recentNumber").text(bingoBlockValue);
             gameDocument = data.gameDocument;
-            console.log("The bingo numbers after bingo numbers crossed are " +  JSON.stringify(gameDocument.bingoBoard.playerStates));
+
+            axios({
+                    method: "post",
+                    url: "/gameBoard/updateBingoCount",
+                    headers: {
+                      Authorization: `Bearer ${cookies.get("jwt")}`,
+                    },
+                    data: {
+                      number: bingoBlockValue,
+                      gameId: gameId,
+                      playerStateId: playersList
+                    },
+            })
+          .then(function (response) { 
+            console.log("BingoNumber Updated for the player as well.")
+          })
+            const playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
+              (player) => player.userId === userId
+            );
+
+            console.log("The player state is ") + JSON.stringify(gameDocument.bingoBoard.playerStates[playerIndex].board);
+            bingoCount = updateBingoCount(gameDocument.bingoBoard.playerStates[playerIndex].board)
+            console.log("The bingo count after bingo numbers crossed is " + bingoCount);
+            for(let i = 0; i <= bingoCount; i++) {
+              $(`#${i}`).css("color", "green");
+            }
+            gameDocument.bingoBoard.playerStates[playerIndex].bingoCount = bingoCount;
+            if (bingoCount === 5) {
+                        isGameCompleted = true;
+                        socket.emit("winnerFound", {
+                          gameId: gameId,
+                          gameDocument: gameDocument,
+                          winnerName: firstName,
+                          bingoCount: bingoCount,
+                          userId: userId,
+                        });
+            }
+
           });
           socket.on("updatePlayerTurn", (data) => {
             gameDocument = data.gameDocument;
-            console.log("The game document inside update player Turn is" + JSON.stringify(gameDocument));
             const playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
               (player) => player.userId === userId
             );
@@ -604,7 +639,8 @@
             }
           });
         });
-        function updatePlayerTurn() {
+        function 
+        updatePlayerTurn() {
           let numberOfPlayers = playersList.length;
           let playerIndex = gameDocument.bingoBoard.playerStates.findIndex(
             (p) => p.userId === userId
@@ -692,17 +728,13 @@
                     .then(function (response) {
                       fields[i].style.backgroundColor = "purple";
                       console.log("Game documen tbefore emitting bingo number crossed is " + JSON.stringify(gameDocument.bingoBoard.playerStates));
-                      socket.emit("bingoNumberCrossed", {
-                        gameId: gameId,
-                        value: fields[i].value,
-                        gameDocument: gameDocument,
-                      });
                       fields[i].value = 0;
                       data = {
                         gameId: gameId,
                         userId: userId,
                         number: crossedNumber,
                         gameDocument: gameDocument,
+                        playerStateId: playersList
                       };
                       let playerIndex =
                         gameDocument.bingoBoard.playerStates.findIndex(
@@ -729,7 +761,6 @@
                         console.log(error);
                         alert(error);
                       });
-                  
                       // update the player turn in the database.
                       axios({
                         method: "post",
@@ -805,8 +836,14 @@
             }
             gameDocument.bingoBoard.playerStates = playerStatesObj;
             gameDocument.bingoBoard.numbers.push(bingoNumber);
+            socket.emit("bingoNumberCrossed", {
+              gameId: gameId,
+              gameDocument: gameDocument,
+              value: bingoNumber, // the number that was crossed
+            });
           }
         }
+      
         // set the input fields to read only so that the user can not input any of their own numbers.
         for (let i = 0; i < 25; i++) {
           fields[i].setAttribute("readonly", true);
