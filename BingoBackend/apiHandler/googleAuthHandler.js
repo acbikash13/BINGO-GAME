@@ -53,7 +53,6 @@ async function handleOAuth2Callback(oAuth2Client, req, res) {
 
         // Set custom JWT token in the Authorization header
         res.cookie('jwt', jwtToken, { httpOnly: true, secure: true });
-        console.log("The JWT token is " + jwtToken);
         res.redirect('/homePage');
     } catch (error) {
         console.error("Error during OAuth callback processing:", error);

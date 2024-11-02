@@ -11,7 +11,6 @@ function convertOneDArrayIntoTwoDArray(listOfNumbers){
         bingoBoardForThePlayer.push(rowInBingoBoard);
 
     }
-    console.log("conversion of the bingoBoard is " +  bingoBoardForThePlayer)
     return bingoBoardForThePlayer;
 }
 module.exports ={convertOneDArrayIntoTwoDArray};

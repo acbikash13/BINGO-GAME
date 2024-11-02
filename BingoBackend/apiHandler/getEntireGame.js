@@ -9,7 +9,6 @@ async function getEntireGame(gameId, userId) {
         // in the collection find the game with the given gameId
         const game = await collection.find({ gameId: Number(gameId) }).toArray();
         if (game.length !== 1) {
-            console.log("Game not found. Cannot work on changing the player turn.");
             return { status: 404, message: 'Game not found! Cannot work on changing the player turn.' };
         }
         let gameDocument = game[0];

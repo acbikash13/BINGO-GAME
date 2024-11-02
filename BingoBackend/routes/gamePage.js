@@ -10,20 +10,18 @@ const {checkGameExistsOrNot} = require('../middleware/checkGameExistsOrNot');
 const {getPlayerState} = require('../apiHandler/getPlayerState');
 const {updatePlayerTurn} = require('../apiHandler/updatePlayerTurn');
 const {getEntireGame} = require('../apiHandler/getEntireGame');
-
+const {getBingoCount} = require('../apiHandler/updateBingoCount');
 
 
 router.route('/getNumbers')
 .post(async (req,res)=>{
    let numbers =   await getBingoBoardNumbers() 
-   console.log("Numbers in the server side is "+  numbers)
    res.status(200).json({message: "Numbers Generated Successfully", listOfNumbers: numbers});
 })
 router.route('/setBingoNumber')
 .post(async (req,res)=>{
     // bingoBoard is a 2D 5*5 array
     const bingoBoard = await convertOneDArrayIntoTwoDArray(req.body.numbers);
-    console.log("BingoBoard in the route is " + bingoBoard)
     let gameId = req.body.gameId;
     const userIsValid = await checkUser(req.cookies['jwt']);
     if(userIsValid) {
@@ -55,7 +53,6 @@ router.route('/getPlayersList')
     // Only send the playerList if the user is authorized and the user is in the game itself.
     for (let playerId of playerIdsList) {
         if(playerId === userIsValid) {
-            console.log("The players list is " + playerIdsList)
             return res.status(playerList.status).json({
                 message:playerList.message,
                 playerList:playerList.playerList,
@@ -73,16 +70,13 @@ router.route('/getPlayerState')
     let gameId = req.body.gameId;
     const doesGameExist = await checkGameExistsOrNot(gameId);
     const userIsValid = await checkUser(req.cookies['jwt']);
-    console.log("User is valid or not " + userIsValid + " GameId is " + gameId +  " doesGameExist is " + doesGameExist.status);
     if (!userIsValid) {
         return res.status(401).json({ message: 'User is not authorized to access the playerState' });
     }
     if(doesGameExist.status === 404) {
-        console.log("Game does not exist to return the player state")
         return res.status(404).json({message:doesGameExist.message});
     }
     if(doesGameExist.status === 500) {
-        console.log("Internal server error in checking the game exists or not")
         return res.status(500).json({message:doesGameExist.message});
     }
     const playerState = await getPlayerState(gameId,userIsValid);
@@ -112,13 +106,23 @@ router.route('/getPlayerState')
     return res.status(gameDocument.status).json({message:gameDocument.message,gameDocument:gameDocument.gameDocument});
  })
 
+ router.route('/updateBingoCount')
+ .post (async (req,res)=>{
+     let gameId = req.body.gameId;
+     const userIsValid = await checkUser(req.cookies['jwt']);
+     if (!userIsValid) {
+        return res.status(401).json({ message: 'User is not authorized to click any numbers.' });
+    }
+    const bingoCount = await getBingoCount(gameId,userIsValid);
+    return res.status(bingoCount.status).json({message:bingoCount.message,bingoCount:bingoCount.bingoCount});
+ })
+
 
 router.route('/crossTheNumber')
 .post(async (req,res)=>{
     let gameId =  req.body.gameId;
     const userIsValid = await checkUser(req.cookies['jwt']);
     let bingoNumber = req.body.number;
-    console.log("Bingo number in the route is " + bingoNumber)
     if(userIsValid) {
         let crossNumberStatus = await crossTheBingoNumber(gameId,bingoNumber);
         res.status(crossNumberStatus.status).json({message:crossNumberStatus.message});

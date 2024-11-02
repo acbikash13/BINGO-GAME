@@ -8,9 +8,7 @@ async function checkGameExistsOrNot(gameId) {
     try {
         const database = await databasePromise;
         const collection = database.collection('games');
-        console.log(gameId)
         let result = await collection.find({ gameId: Number(gameId) }).toArray();
-        console.log(result)
         if (result.length > 0) {
             // user is authorized. Return the user's ID.
             return { status: 200, message: 'Games Exists!' };

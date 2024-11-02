@@ -9,7 +9,6 @@ async function getPlayersList(gameId) {
         // find the game for that particular game.
         const playerListObject = await collection.find({gameId:Number(gameId)}).toArray();
         if(playerListObject.length !==1 ) {
-            console.log("Game not found. Cannot work on getting the player List.");
             return {status:404, message:'Game not found! Cannot work on getting the player List!'}
         }
         // get players list array in the game

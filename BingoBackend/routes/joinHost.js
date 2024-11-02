@@ -3,7 +3,6 @@
 router.route('/hostGame')
 .post(async (req,res) => {
     const userIsValid = await checkUser(req.cookies['jwt']);
-    console.log(userIsValid)
     if(userIsValid) {
         try {
             let hostedGame = await hostGame(userIsValid);
@@ -25,10 +24,8 @@ router.route('/joinGame')
     const userIsValid = await checkUser(req.cookies['jwt']);
     if(userIsValid) {
         let gameId = req.body.gameId;
-        console.log("Game id is while joining is "+ typeof(Number(gameId)));
         try {
             let joinGameResult = await joinGame(userIsValid, Number(gameId));
-            console.log("The join Game result is " + joinGameResult.message)
             res.status(joinGameResult.status).json({ message: joinGameResult.message });
         } catch (err) {
             console.error(err);

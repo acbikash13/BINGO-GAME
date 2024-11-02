@@ -13,7 +13,6 @@ async function getUserData(userId) {
                 lastName: data[0].lastName,
                 email: data[0].userName
             }
-            console.log(userData);
             return userData;
         }
         catch (error) {

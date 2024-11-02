@@ -11,7 +11,6 @@ async function crossTheBingoNumber(gameId, bingoNumber) {
         const playerStatesForEveryPlayer = await collection.find({gameId:Number(gameId)}).toArray();
 
         if(playerStatesForEveryPlayer.length !==1 ) {
-            console.log("game found");
             return {status:404, message:'Game not found! Can not cross the Bingo Number!'}
         }
         // get every players state in the game which is an arry of objects.
