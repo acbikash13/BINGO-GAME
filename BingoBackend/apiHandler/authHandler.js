@@ -24,6 +24,7 @@ async function login(req,res)  {
 		collection.find({userName:user.userName},{_id:1,userName:1,password:1}).toArray(async function(err,result){
 			if (err) throw err;
 			if(result.length == 0) {
+				console.log("user is " + user)
 				res.status(406).json({message:'User is not registered'})
 			}
 			//user is registered
