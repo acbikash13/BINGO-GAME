@@ -83,9 +83,23 @@ router.route('/.auth/login/google/callback').get((req,res)=> {
 
 // endpoint to handle the signup function
 router.route("/api/auth/signup")
-.post((req,res)=>{
-    //sign up the user
-    signup(req,res);
+.post( async (req,res)=>{
+    let user = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        userName: req.body.userName,
+        password: req.body.password
+    }
+    let userStatus = await signup(user);
+
+    console.log("userStatus is " + JSON.stringify(userStatus));
+    if(userStatus.status === 201) {
+        res.status(userStatus.status).json({message:userStatus.message});
+    }
+    else {
+        console.log("userStatus is " + userStatus.status); 
+        res.status(userStatus.status).json({message:userStatus.message});
+    }
 });
 
 
