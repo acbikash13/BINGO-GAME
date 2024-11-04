@@ -61,6 +61,10 @@ io.on('connection', (socket) => {
         io.to(data.gameId).emit('playerJoined', data);
     });
 
+    socket.on("player-turn-status", ()=> {
+        io.emit('player-turn-status', currentTurn);
+    });
+
     socket.on('onDone', (data) => {
         io.emit('onDone', data);
     }); 

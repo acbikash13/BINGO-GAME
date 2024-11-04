@@ -137,19 +137,39 @@
         password: password
       };
       axios.post('/api/auth/login', userData)
-        .then(response => {
-          if (response.status === 200) {
-            console.log(response.data.message);
-            cookies.set('jwt', response.headers.authorization.replace('Bearer ', ''));
-            window.location.href = '/homePage';
+      .then(response => {
+        console.log("Response inside res is " + response)
+        if (response.status === 200) {
+          console.log(response.data.message);
+          // Store JWT in cookies
+          cookies.set('jwt', response.headers.authorization.replace('Bearer ', ''));
+          window.location.href = '/homePage';
+        } else {
+          // Handle unexpected non-200 statuses
+          console.error("Unexpected status:", response.status);
+          alert(response.data.message);
+        }
+      })
+      .catch(error => {
+        console.log("Error inside catch is " + error)
+        // Log the full error response for debugging
+        if (error.response) {
+          console.log("Error response:", error.response);
+          if (error.response.status === 404) {
+            alert("User is not registered. Please sign up.");
+          } else if (error.response.status === 401) {
+            alert("Incorrect password. Please try again.");
           } else {
-            alert(response.data.message);
+            alert(error.response.data.message);
           }
-        })
-        .catch(error => {
-          alert(error);
-        });
+        } else {
+          console.error("Error:", error);
+          alert("Network error or server unreachable.");
+        }
+      });
     });
+
+
 
     const signUpButton = document.getElementById("signUpButton");
     signUpButton.addEventListener("click", () => {

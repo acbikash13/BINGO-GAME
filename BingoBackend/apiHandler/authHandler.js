@@ -8,7 +8,6 @@ const databasePromise = require('./databaseConnector.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
-
 async function login(req,res)  {
 
 	// get the user credentials
@@ -49,29 +48,29 @@ async function login(req,res)  {
 	  }
 };
 
-async function signup(req,res){
-	const user =  {
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
-		userName: req.body.userName,
-		password: req.body.password
-	}
+async function signup(userInfo){
+	const firstName = userInfo.firstName;
+	const lastName = userInfo.lastName;
+	const userName = userInfo.userName;
+	const password = userInfo.password;
+
+	const user = {
+		firstName: firstName,
+		lastName: lastName,
+		userName: userName,
+		password: password
+	};
 	try{
 		const database = await databasePromise;
-		const collection =  database.collection('users');
-		collection.find({userName:user.userName}, {userName:1}).toArray(function(err,result){
-			if (err) throw err;
-			if (result.length > 0) {
-				res.status(406).json({message: 'User already exists with the same username'});
-			}
-			else {
-				user.password =  bcrypt.hashSync(user.password,salt).replace(`${salt}.`,'');
-				collection.insertOne(user,function(err,result){
-					if (err) throw err;
-					res.status(201).json({message: 'User has been successfully created!'});
-				})
-			}
-		})
+		const collection = await database.collection('users');
+		const result = await collection.find({userName: user.userName}, {userName: 1}).toArray();
+		if (result.length > 0) {
+			return {status: 406, message: 'User already exists with the same username'};
+		} else {
+			user.password = bcrypt.hashSync(user.password, salt).replace(`${salt}.`, '');
+			await collection.insertOne(user);
+			return {status: 201, message: 'User has been successfully created!'};
+		}
 	}
 	catch (error) {
 		console.error('Error connecting to the database: ', error);
@@ -90,6 +89,4 @@ async function logout(jwtToken) {
 		return false
 	}	
 }
-
-
 module.exports = {login,signup,logout};
